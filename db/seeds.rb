@@ -5,3 +5,11 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+9.times do |i|
+    Project.create(
+        name: "Test Project #{i + 1}",
+        description: "Test Description",
+        repo_url: "https://www.google.com/",
+        status: 0
+    )
+end
