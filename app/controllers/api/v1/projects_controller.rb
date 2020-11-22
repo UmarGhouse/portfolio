@@ -1,4 +1,6 @@
 class Api::V1::ProjectsController < ApplicationController
+  before_action :set_project, only: [:show, :update, :destroy]
+
   def index
     projects = Project.all.order(created_at: :desc)
     render json: projects
@@ -18,15 +20,15 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def show
-    if project
-      render json: project
+    if @project
+      render json: @project
     else
-      render json: project.errors
+      render json: @project.errors
     end
   end
 
   def destroy
-    project&.destroy
+    @project&.destroy
     render json: { message: 'Project Deleted!' }
   end
 
@@ -36,7 +38,7 @@ class Api::V1::ProjectsController < ApplicationController
     params.permit(:name, :description, :repo_url, :status)
   end
 
-  def project
-    @project ||= Project.find(params[:id])
+  def set_project
+    @project = Project.find(params[:id])
   end
 end
