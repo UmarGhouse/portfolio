@@ -20,7 +20,7 @@ class Projects extends Component {
 
 				throw new Error("Network response was not OK")
 			})
-			.then(response => this.setState({ projects: response }, () => { console.log(this.state.projects[0]) }))
+			.then(response => this.setState({ projects: response }))
 			.catch(() => this.props.history.push("/"))
 	}
 
@@ -48,6 +48,9 @@ class Projects extends Component {
 
 		return (
 			<>
+				<Link to="/project">
+					Create new Project
+				</Link>
 				{projects.length > 0 ? allProjects : noProject}
 			</>
 		)
