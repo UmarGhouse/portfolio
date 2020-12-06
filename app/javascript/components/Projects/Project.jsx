@@ -7,8 +7,6 @@ class Project extends React.Component {
     this.state = {
       project: null
     }
-
-    this.addHTMLEntities = this.addHTMLEntities.bind(this)
   }
 
   componentDidMount() {
@@ -24,14 +22,37 @@ class Project extends React.Component {
 
         throw new Error("Network reponse was not OK")
       })
-      .then(response => { console.log(response); this.setState({ project: response }) })
+      .then(response => { this.setState({ project: response }) })
       .catch((error) => console.log(error))
   }
 
-  addHTMLEntities(str) {
+  addHTMLEntities = (str) => {
     return String(str)
       .replace(/&lt;/g, "<")
       .replace(/&gt;/g, ">")
+  }
+
+  deleteProject = () => {
+    const { match: { params: { id } } } = this.props
+
+    const url = `/api/v1/projects/destroy/${id}`
+    const token = document.querySelector('meta[name="csrf-token"]').content
+
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        "X-CSRF-Token": token,
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+        throw new Error("Network response was not OK")
+      })
+      .then(() => this.props.history.push("/projects"))
+      .catch(error => console.error(error.message))
   }
 
   render() {
@@ -40,6 +61,10 @@ class Project extends React.Component {
     return (
       <div>
         <h1>{project ? project.name : "Loading..."}</h1>
+
+        <button type="button" onClick={this.deleteProject}>Delete Project</button>
+
+        <Link to="/projects">Back to all projects</Link>
       </div>
     )
   }
