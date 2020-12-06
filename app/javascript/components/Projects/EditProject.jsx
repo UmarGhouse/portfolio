@@ -3,9 +3,30 @@ import { Link } from 'react-router-dom'
 
 import ProjectForm from '../Forms/ProjectForm'
 
-class NewProject extends React.Component {
+class EditProject extends React.Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      projectData: null
+    }
+  }
+
+  componentDidMount() {
+    const { match: { params: { id } } } = this.props
+
+    const url = `/api/v1/projects/show/${id}`
+
+    fetch(url)
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+
+        throw new Error("Network reponse was not OK")
+      })
+      .then(response => { this.setState({ projectData: response }) })
+      .catch((error) => console.log(error))
   }
 
   stripHtmlEntities = (str) => {
@@ -15,8 +36,10 @@ class NewProject extends React.Component {
   }
 
   onSubmit = (event, formData) => {
+    const { match: { params: { id } } } = this.props
+
     event.preventDefault()
-    const url = "/api/v1/projects/create"
+    const url = `/api/v1/projects/update/${id}`
     const { name, description, repo_url, status } = formData
 
     if (name.length == 0 | description.length == 0) return
@@ -30,7 +53,7 @@ class NewProject extends React.Component {
 
     const token = document.querySelector('meta[name="csrf-token"]').content
     fetch(url, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         "X-CSRF-Token": token,
         "Content-Type": "application/json"
@@ -48,14 +71,17 @@ class NewProject extends React.Component {
   }
 
   render() {
+    const { projectData } = this.state
+    
     return (
       <div>
-        <h1>Add a new project</h1>
+        <h1>{projectData ? `Edit ${projectData.name}` : "loading..."}</h1>
 
         <ProjectForm
           handleSubmit={this.onSubmit}
           handleChange={this.onChange}
-          submitButtonText="Create project"
+          currentValues={projectData}
+          submitButtonText="Save Changes"
         />
         
         <Link to="/projects">Back to all Projects</Link>
@@ -64,4 +90,4 @@ class NewProject extends React.Component {
   }
 }
 
-export default NewProject
+export default EditProject

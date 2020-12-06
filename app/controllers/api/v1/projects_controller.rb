@@ -17,6 +17,11 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def update
+    if @project.update(project_params)
+      render json: @project
+    else
+      render json: @project.errors
+    end
   end
 
   def show
@@ -35,7 +40,7 @@ class Api::V1::ProjectsController < ApplicationController
   private
 
   def project_params
-    params.permit(:name, :description, :repo_url, :status)
+    params.require(:project).permit(:name, :description, :repo_url, :status)
   end
 
   def set_project

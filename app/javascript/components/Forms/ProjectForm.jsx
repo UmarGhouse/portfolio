@@ -1,24 +1,61 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 class ProjectForm extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      name: "",
+      description: "",
+      repo_url: "",
+      status: "private"
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+
+    const { currentValues } = this.props
+
+    if (prevProps.currentValues !== currentValues) {
+      if (currentValues) {
+        this.setState({
+          name: currentValues.name,
+          description: currentValues.description,
+          repo_url: currentValues.repo_url,
+          status: currentValues.status
+        })
+      } else {
+        this.setState({
+          name: "",
+          description: "",
+          repo_url: "",
+          status: 0
+        })
+      }
+    }
+  }
+
+  onChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value })
+  }
+
   render() {
-    const {handleSubmit, handleChange} = this.props
+    const {handleSubmit, submitButtonText} = this.props
+    const { name, description, repo_url, status } = this.state
 
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(event) => { handleSubmit(event, this.state) }}>
         <label>Project Name</label>
         <input 
           type="text"
           name="name"
+          value={name}
           id="projectName"
           required
-          onChange={handleChange}
+          onChange={this.onChange}
         />
 
-        <button type="submit">Create Project</button>
-        
-        <Link to="/projects">Back to all Projects</Link>
+        <button type="submit">{submitButtonText}</button>
       </form>
     )
   }

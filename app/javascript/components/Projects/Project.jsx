@@ -64,6 +64,12 @@ class Project extends React.Component {
 
         <button type="button" onClick={this.deleteProject}>Delete Project</button>
 
+        <br/>
+
+        {project && (<Link to={`/project/${project.id}/edit`}>Edit this project</Link>)}
+        
+        <br/>
+        
         <Link to="/projects">Back to all projects</Link>
       </div>
     )
