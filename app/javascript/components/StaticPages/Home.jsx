@@ -1,7 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
-import { Container, Grid, Button } from '@material-ui/core'
+import { Container, Grid } from '@material-ui/core'
+
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+
+import { LinkButton } from '../Blocks'
 
 import heroImage from '../../../assets/images/hero-image.svg'
 
@@ -27,26 +30,15 @@ export default () => (
 		</Grid>
 
 		<p className='background-text'>
-			Umar Ghouse
+			Fullstack Developer
 		</p>
+		
+		<LinkButton className='btn-secondary' variant='outlined' href="/about">
+			Read more about me
+		</LinkButton>
 
-		<Link
-			to="/about"
-			className='btn'
-			role="button"
-		>
-			<Button className='btn-secondary' variant='outlined'>
-				Read more about me
-			</Button>
-		</Link>
-
-		<Link
-			to="/projects"
-			role="button"
-		>
-			<Button className='btn-primary' variant='contained'>
-				View my projects
-			</Button>
-		</Link>
+		<LinkButton className='btn-primary' variant='contained' href="/projects">
+			View my projects
+		</LinkButton>
 	</Container>
 );
