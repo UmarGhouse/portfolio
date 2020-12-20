@@ -1,23 +1,39 @@
-@import '../stylesheets/static_pages.scss';
+@import '../stylesheets/home.scss';
+@import '../stylesheets/variables.scss';
 
-.bg_primary-color {
-  background-color: #FFFFFF;
+
+body {
+  background-color: $baseColor;
+  color: $accentWhite;
+  font-family: $bodyType;
+
+  a {
+    color: $accentRed !important;
+    text-decoration: none;
+  }
 }
-.primary-color {
-  background-color: #FFFFFF;
+
+.btn {
+  margin: 10px;
 }
-.bg_secondary-color {
-  background-color: #293241;
+
+.btn-secondary {
+  border-color: $accentRed !important;
+  color: $accentRed !important;
 }
-.secondary-color {
-  color: #293241;
+
+.btn-secondary:hover {
+  background-color: $accentRed !important;
+  color: $accentWhite !important;
 }
-.custom-button.btn {
-  background-color: #293241;
-  color: #FFF;
-  border: none;
+
+.btn-primary {
+  background-color: $secondaryColor !important;
+  color: $accentWhite !important;
 }
-.custom-button.btn:hover {
-  color: red !important;
-  border: none;
+
+.btn-primary:hover {
+  border-color: $accentWhite !important;
+  background-color: $accentWhite !important;
+  color: $secondaryColor !important;
 }

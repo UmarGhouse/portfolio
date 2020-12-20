@@ -1,0 +1,37 @@
+@import './variables.scss';
+
+.home {
+  margin-top: 5rem;
+}
+
+.background-text {
+  z-index: -1;
+  position: absolute;
+  margin: 10px;
+  left: -4vw;
+  top: 10vh;
+  font-size: 35vh;
+  font-weight: 700;
+  font-family: $headerType;
+  word-wrap: break-word;
+  opacity: 0.5;
+  color: lighten($color: $baseColor, $amount: 7);
+}
+
+.hero-header {
+  font-family: $headerType;
+  font-size: 7rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.hero-body {
+  font-family: $subHeaderType;
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.hero-image {
+  max-height: 100%;
+  width: 25vw;
+}
