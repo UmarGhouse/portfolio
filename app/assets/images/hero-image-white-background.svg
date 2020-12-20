@@ -13,7 +13,7 @@
    height="479.07651"
    viewBox="0 0 562.15333 479.07652"
    version="1.1"
-   sodipodi:docname="hero-image.svg"
+   sodipodi:docname="hero-image-white-background.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <metadata
      id="metadata89">
@@ -60,7 +60,15 @@
      inkscape:groupmode="layer"
      id="layer1"
      inkscape:label="Flat Background"
-     transform="translate(21.025984,21.72509)" />
+     transform="translate(21.025984,21.72509)">
+    <rect
+       style="fill:#ffffff"
+       id="rect26"
+       width="562.15332"
+       height="479.07651"
+       x="-21.025984"
+       y="-21.72509" />
+  </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"

@@ -9,11 +9,18 @@ const styles = (theme) => ({
     paddingBottom: '10px',
     paddingLeft: '20px',
     paddingRight: '20px'
+  },
+  buttonLabel: {
+    fontFamily: "Montserrat, sans-serif",
+    
+    [theme.breakpoints.down('md')]: {
+      fontSize: '1.2em'
+    }
   }
 })
 
 const LinkButton = ({className, variant, href, classes, children}) => (
-  <Button className={className} classes={{ root: classes.buttonSpacing }} variant={variant} component={Link} to={href}>
+  <Button className={className} classes={{ root: classes.buttonSpacing, label: classes.buttonLabel }} variant={variant} component={Link} to={href}>
     {children}
   </Button>
 )

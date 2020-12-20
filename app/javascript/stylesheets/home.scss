@@ -5,10 +5,10 @@
 }
 
 .background-text {
-  z-index: -1;
+  z-index: -2;
   position: absolute;
   margin: 10px;
-  left: -4vw;
+  left: -3vw;
   top: 10vh;
   font-size: 35vh;
   font-weight: 700;
@@ -16,6 +16,17 @@
   word-wrap: break-word;
   opacity: 0.5;
   color: lighten($color: $baseColor, $amount: 7);
+
+  @media screen and (max-width: 600px) {
+    font-size: 5rem;
+    top: 15vh;
+  }
+}
+
+.hero-container {
+  @media screen and (max-width: 600px) {
+    flex-direction: column-reverse;
+  }
 }
 
 .hero-header {
@@ -23,15 +34,65 @@
   font-size: 7rem;
   font-weight: 700;
   margin-bottom: 25px;
+
+  @media screen and (max-width: 600px) {
+    font-size: 4rem;
+    top: 15vh;
+  }
 }
 
 .hero-body {
   font-family: $subHeaderType;
   font-size: 2rem;
   font-weight: 400;
+
+  @media screen and (max-width: 600px) {
+    font-size: 1.25rem;
+    top: 15vh;
+  }
 }
 
 .hero-image {
   max-height: 100%;
   width: 25vw;
+  border-radius: 1rem;
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
+  }
+}
+
+.hero-image-background {
+  position: absolute;
+  max-height: 75%;
+  width: 25vw;
+  top: 2.5rem;
+  bottom: 5rem;
+  background: darken($color: $secondaryColor, $amount: 25);
+  border-radius: 1rem;
+  transform: rotate(-3deg);
+  z-index: -1;
+  opacity: 0.45;
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
+  }
+}
+
+.arrow-container {
+  position: absolute;
+  left: 50%;
+  top: 90%;
+
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
+}
+
+.arrow-text {
+  font-weight: 100;
+}
+
+.arrow {
+  color: $accentRed
 }
