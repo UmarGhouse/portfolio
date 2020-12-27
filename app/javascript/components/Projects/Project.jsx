@@ -1,6 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+import { Container, Typography, Button, Tooltip } from '@material-ui/core'
+
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
+
+import { LinkButton } from '../Blocks'
+
 class Project extends React.Component {
   constructor(props) {
     super(props)
@@ -55,23 +62,42 @@ class Project extends React.Component {
       .catch(error => console.error(error.message))
   }
 
+  
   render() {
     const { project } = this.state
-
+    
+    const showRepoButton = (
+      <>
+        {project && project.status === "public" ? 
+          (<Tooltip title={project && project.repo_url}><a href={project ? project.repo_url : "#"} target="_blank"><OpenInNewIcon /></a></Tooltip>) 
+          : (
+            <Tooltip title="Private repo">
+              <VisibilityOffIcon />
+            </Tooltip>
+          )}
+      </>
+    )
+    
     return (
-      <div>
-        <h1>{project ? project.name : "Loading..."}</h1>
+      <Container>
+        <h1>
+          {project ? project.name : "Loading..."} {showRepoButton}
+        </h1>
 
-        <button type="button" onClick={this.deleteProject}>Delete Project</button>
+        <Typography>
+          {project ? project.description : "Loading..."}
+        </Typography>
+
+        {project && (<LinkButton variant="outlined" className="btn-primary" href={`/project/${project.id}/edit`}>Edit this project</LinkButton>)}
 
         <br/>
 
-        {project && (<Link to={`/project/${project.id}/edit`}>Edit this project</Link>)}
+        <Button variant="outlined" className="btn-secondary" onClick={this.deleteProject}>Delete Project</Button>
         
         <br/>
         
-        <Link to="/projects">Back to all projects</Link>
-      </div>
+        <LinkButton variant="outlined" className="btn-secondary" href="/projects">Back to all projects</LinkButton>
+      </Container>
     )
   }
 }

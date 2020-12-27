@@ -1,0 +1,11 @@
+@import './variables.scss';
+
+.project-grid-item {
+  p, h2 {
+    color: $accentWhite;
+  }
+}
+
+.text-field {
+  margin: 10px;
+}

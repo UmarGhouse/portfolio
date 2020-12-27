@@ -1,7 +1,9 @@
 import React from "react"
-import { Link } from 'react-router-dom'
+
+import { Container } from '@material-ui/core'
 
 import ProjectForm from '../Forms/ProjectForm'
+import { LinkButton } from '../Blocks'
 
 class EditProject extends React.Component {
   constructor(props) {
@@ -74,7 +76,7 @@ class EditProject extends React.Component {
     const { projectData } = this.state
     
     return (
-      <div>
+      <Container>
         <h1>{projectData ? `Edit ${projectData.name}` : "loading..."}</h1>
 
         <ProjectForm
@@ -84,8 +86,8 @@ class EditProject extends React.Component {
           submitButtonText="Save Changes"
         />
         
-        <Link to="/projects">Back to all Projects</Link>
-      </div>
+        <LinkButton className="btn-secondary" variant="outlined" href="/projects">Back to all Projects</LinkButton>
+      </Container>
     )
   }
 }

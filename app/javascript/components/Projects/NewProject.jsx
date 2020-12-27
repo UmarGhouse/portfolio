@@ -1,7 +1,10 @@
 import React from "react"
 import { Link } from 'react-router-dom'
 
+import { Container } from '@material-ui/core'
+
 import ProjectForm from '../Forms/ProjectForm'
+import { LinkButton } from '../Blocks'
 
 class NewProject extends React.Component {
   constructor(props) {
@@ -49,7 +52,7 @@ class NewProject extends React.Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <h1>Add a new project</h1>
 
         <ProjectForm
@@ -58,8 +61,8 @@ class NewProject extends React.Component {
           submitButtonText="Create project"
         />
         
-        <Link to="/projects">Back to all Projects</Link>
-      </div>
+        <LinkButton className="btn-secondary" variant="outlined" href="/projects">Back to all Projects</LinkButton>
+      </Container>
     )
   }
 }
