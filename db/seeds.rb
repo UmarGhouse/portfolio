@@ -10,6 +10,12 @@
         name: "Test Project #{i + 1}",
         description: "Test Description",
         repo_url: "https://www.google.com/",
-        status: 0
+        status: i%2 == 0 ? 0 : 1
+    )
+end
+
+5.times do |i|
+    Skill.create(
+        name: "Test skill #{i + 1}"
     )
 end
