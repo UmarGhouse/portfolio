@@ -8,14 +8,12 @@ import NewProject from "../components/Projects/NewProject"
 import EditProject from "../components/Projects/EditProject"
 
 export default (
-    <Router>
-        <Switch>
-            <Route path="/" exact component={Home} />
-            <Route path="/about" exact component={About} />
-            <Route path="/projects" exact component={Projects} />
-            <Route path="/project/:id" exact component={Project} />
-            <Route path="/project" exact component={NewProject} />
-            <Route path="/project/:id/edit" exact component={EditProject} />
-        </Switch>
-    </Router>
+    <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/about" exact component={About} />
+        <Route path="/projects" exact component={Projects} />
+        <Route path="/project/:id" exact component={Project} />
+        <Route path="/project" exact component={NewProject} />
+        <Route path="/project/:id/edit" exact component={EditProject} />
+    </Switch>
 );
