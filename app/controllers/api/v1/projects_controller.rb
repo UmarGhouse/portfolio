@@ -40,7 +40,7 @@ class Api::V1::ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:name, :description, :repo_url, :status)
+    params.require(:project).permit(:name, :description, :repo_url, :status, screenshots: [])
   end
 
   def set_project
