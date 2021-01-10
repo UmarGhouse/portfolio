@@ -20,7 +20,9 @@ class NewProject extends React.Component {
   onSubmit = (event, formData) => {
     event.preventDefault()
     const url = "/api/v1/projects/create"
-    const { name, description, repo_url, status } = formData
+    const { name, description, repo_url, status, screenshots } = formData
+
+    console.log(formData)
 
     if (name.length == 0 | description.length == 0) return
 
@@ -28,7 +30,8 @@ class NewProject extends React.Component {
       name,
       description: description.replace(/\n/g, "<br> <br>"),
       repo_url,
-      status
+      status,
+      screenshots
     }
 
     const token = document.querySelector('meta[name="csrf-token"]').content
@@ -38,7 +41,7 @@ class NewProject extends React.Component {
         "X-CSRF-Token": token,
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify({ project: body})
     })
       .then(response => {
         if (response.ok) {
@@ -57,7 +60,6 @@ class NewProject extends React.Component {
 
         <ProjectForm
           handleSubmit={this.onSubmit}
-          handleChange={this.onChange}
           submitButtonText="Create project"
         />
         

@@ -2,15 +2,20 @@ import React from 'react'
 
 import { Button, TextField, Paper, FormGroup, FormControl, Checkbox, FormLabel, FormControlLabel } from '@material-ui/core'
 
+import { DropzoneArea } from 'material-ui-dropzone'
+import { DirectUpload } from '@rails/activestorage'
+
 class ProjectForm extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      name: "",
-      description: "",
-      repo_url: "",
-      status: "private"
+      name: "", // String - name of the project
+      description: "", // Rich Text Description of the project
+      repo_url: "", // Link to Github repo
+      status: "private", // Notes whether Github repo is private/public
+      screenshots: [], // Array of screenshots to be uploaded to ActiveStorage
+      blob_ids: []
     }
   }
 
@@ -49,6 +54,28 @@ class ProjectForm extends React.Component {
     })
   }
 
+  onDrop = (files) => {
+    files.forEach(file => this.uploadFile(file))
+  }
+
+  uploadFile = (file) => {
+    const url = "https://localhost:3000/rails/active_storage/direct_uploads"
+
+    const upload = new DirectUpload(file, url)
+
+    upload.create((error, blob) => {
+      if (error) {
+        console.log(error)
+      } else {
+        this.setState(prevState => ({ blob_ids: [...prevState.blob_ids, blob] }))
+      }
+    })
+  }
+  
+  handlefieUpload = (files) => {
+    this.setState(prevState => ({ screenshots: [...prevState.screenshots, ...files] }))
+  }
+
   render() {
     const {handleSubmit, submitButtonText} = this.props
     const { name, description, repo_url, status } = this.state
@@ -56,6 +83,14 @@ class ProjectForm extends React.Component {
     return (
       <Paper style={{ backgroundColor: "#2c3a41", padding: "10px" }} elevation={0}>
         <form onSubmit={(event) => { handleSubmit(event, this.state) }}>
+
+          <DropzoneArea
+            acceptedFiles={['image/*']}
+            dropzoneText={"Drag and drop an image here or click"}
+            onChange={(files) => { this.handlefieUpload(files) }}
+            onDrop={(files) => {this.onDrop(files)}}
+          />
+
           <TextField 
             variant="outlined" 
             style={{ margin: "10px", display: "block" }}
