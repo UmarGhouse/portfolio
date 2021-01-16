@@ -7,7 +7,12 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def create
-    project = Project.create!(project_params)
+    params = { name: project_params[:name], description: project_params[:description], repo_url: project_params[:repo_url], status: project_params[:status] }
+    screenshots = project_params[:screenshots].map { |screenshot_param| screenshot_param[:signed_blob_id] }
+
+    project = Project.create!(params)
+
+    project.screenshots.attach(screenshots)
 
     if project
       render json: project
@@ -26,7 +31,7 @@ class Api::V1::ProjectsController < ApplicationController
 
   def show
     if @project
-      render json: @project
+      render json: @project.as_json.merge({ screenshots: @project.screenshots.map { |screenshot| url_for(screenshot) } })
     else
       render json: @project.errors
     end
@@ -40,10 +45,10 @@ class Api::V1::ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:name, :description, :repo_url, :status, screenshots: [:path])
+    params.require(:project).permit(:name, :description, :repo_url, :status, screenshots: [:signed_blob_id, :filename])
   end
 
   def set_project
-    @project = Project.find(params[:id])
+    @project = Project.with_attached_screenshots.find(params[:id])
   end
 end

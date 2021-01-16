@@ -59,15 +59,15 @@ class ProjectForm extends React.Component {
   }
 
   uploadFile = (file) => {
-    const url = "https://localhost:3000/rails/active_storage/direct_uploads"
+    const url = "http://localhost:3000/rails/active_storage/direct_uploads"
 
     const upload = new DirectUpload(file, url)
 
     upload.create((error, blob) => {
       if (error) {
-        console.log(error)
+        console.log("UPLOAD ERROR" ,error)
       } else {
-        this.setState(prevState => ({ blob_ids: [...prevState.blob_ids, blob] }))
+        this.setState(prevState => ({ blob_ids: [...prevState.blob_ids, blob] }), () => { console.log("POST UPLOAD: ", this.state.blob_ids) })
       }
     })
   }

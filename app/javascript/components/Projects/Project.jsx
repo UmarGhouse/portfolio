@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { Container, Typography, Button, Tooltip } from '@material-ui/core'
+import { Container, Typography, Button, Tooltip, GridList, GridListTile } from '@material-ui/core'
 
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
@@ -83,6 +83,16 @@ class Project extends React.Component {
         <h1>
           {project ? project.name : "Loading..."} {showRepoButton}
         </h1>
+
+        {project && project.screenshots.length > 0 && (
+          <GridList cellHeight={160} cols={3}>
+            {project.screenshots.map((screenshot, index) => (
+              <GridListTile key={index} cols={1}>
+                <img src={screenshot} alt={`screenshot-${index}`} />
+              </GridListTile>
+            ))}
+          </GridList>
+        )}
 
         <Typography>
           {project ? project.description : "Loading..."}
