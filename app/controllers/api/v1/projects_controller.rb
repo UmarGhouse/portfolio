@@ -31,7 +31,7 @@ class Api::V1::ProjectsController < ApplicationController
 
   def show
     if @project
-      render json: @project.as_json.merge({ screenshots: @project.screenshots.map { |screenshot| url_for(screenshot) } })
+      render json: @project.as_json.merge({ screenshots: @project.screenshots.map { |screenshot| screenshot.service_url } })
     else
       render json: @project.errors
     end
