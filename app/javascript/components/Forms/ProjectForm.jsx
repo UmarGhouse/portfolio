@@ -1,9 +1,13 @@
 import React from 'react'
 
-import { Button, TextField, Paper, FormGroup, FormControl, Checkbox, FormLabel, FormControlLabel } from '@material-ui/core'
+import { Button, TextField, Paper, FormGroup, FormControl, Checkbox, FormLabel, FormControlLabel, Grid, Snackbar, IconButton } from '@material-ui/core'
 
 import { DropzoneArea } from 'material-ui-dropzone'
 import { DirectUpload } from '@rails/activestorage'
+
+import ScreenshotItem from './ScreenshotItem'
+
+import { CustomSnackbar } from '../Blocks'
 
 class ProjectForm extends React.Component {
   constructor(props) {
@@ -15,7 +19,9 @@ class ProjectForm extends React.Component {
       repo_url: "", // Link to Github repo
       status: "private", // Notes whether Github repo is private/public
       screenshots: [], // Array of screenshots to be uploaded to ActiveStorage
-      blob_ids: []
+      blob_ids: [],
+      screenshotsToDisplay: [], // Array of screenshots already attached to the project to be displayed
+      openSnackbar: false
     }
   }
 
@@ -29,14 +35,16 @@ class ProjectForm extends React.Component {
           name: currentValues.name,
           description: currentValues.description,
           repo_url: currentValues.repo_url,
-          status: currentValues.status
+          status: currentValues.status,
+          screenshotsToDisplay: currentValues.screenshots
         })
       } else {
         this.setState({
           name: "",
           description: "",
           repo_url: "",
-          status: 0
+          status: 0,
+          screenshotsToDisplay: [],
         })
       }
     }
@@ -65,83 +73,109 @@ class ProjectForm extends React.Component {
 
     upload.create((error, blob) => {
       if (error) {
-        console.log("UPLOAD ERROR" ,error)
+        console.log("UPLOAD ERROR", error)
       } else {
-        this.setState(prevState => ({ blob_ids: [...prevState.blob_ids, blob] }), () => { console.log("POST UPLOAD: ", this.state.blob_ids) })
+        this.setState(prevState => ({ blob_ids: [...prevState.blob_ids, blob], openSnackbar: true }))
       }
     })
   }
-  
+
   handlefieUpload = (files) => {
     this.setState(prevState => ({ screenshots: [...prevState.screenshots, ...files] }))
   }
 
+  handleSnackbarClose = () => {
+    this.setState({ openSnackbar: false })
+  }
+
   render() {
-    const {handleSubmit, submitButtonText} = this.props
-    const { name, description, repo_url, status } = this.state
+    const { handleSubmit, submitButtonText } = this.props
+    const { name, description, repo_url, status, screenshotsToDisplay, openSnackbar } = this.state
 
     return (
-      <Paper style={{ backgroundColor: "#2c3a41", padding: "10px" }} elevation={0}>
+      <Paper style={{ backgroundColor: "#fcfcfc", padding: "2em" }}>
         <form onSubmit={(event) => { handleSubmit(event, this.state) }}>
+          <Grid container spacing={5} justify="space-between">
+            <Grid item xs={12}>
+              <DropzoneArea
+                acceptedFiles={['image/*']}
+                dropzoneText={"Drag and drop an image here or click"}
+                onChange={(files) => { this.handlefieUpload(files) }}
+                onDrop={(files) => { this.onDrop(files) }}
+              />
+            </Grid>
 
-          <DropzoneArea
-            acceptedFiles={['image/*']}
-            dropzoneText={"Drag and drop an image here or click"}
-            onChange={(files) => { this.handlefieUpload(files) }}
-            onDrop={(files) => {this.onDrop(files)}}
-          />
-
-          <TextField 
-            variant="outlined" 
-            style={{ margin: "10px", display: "block" }}
-            label="Project Name" 
-            name="name" 
-            value={name} 
-            id="projectName" 
-            required 
-            onChange={this.onChange} 
-          />
-
-          <TextField 
-            variant="outlined" 
-            style={{ margin: "10px", display: "block" }}
-            label="Project Description" 
-            name="description" 
-            value={description} 
-            id="projectDescription" 
-            multiline
-            required
-            onChange={this.onChange} 
-          />
-
-          <TextField 
-            variant="outlined" 
-            style={{ margin: "10px", display: "block" }}
-            label="Project Repo URL" 
-            name="repo_url" 
-            value={repo_url} 
-            id="projectRepo" 
-            required 
-            onChange={this.onChange} 
-          />
-
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Repo Status</FormLabel>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox checked={status === "private"} onChange={this.handleCheckboxChange} name="private" />}
-                label="Private"
+            <Grid item xs={6}>
+              <TextField
+                variant="outlined"
+                fullWidth
+                style={{ margin: "10px", display: "block" }}
+                label="Project Name"
+                name="name"
+                value={name}
+                id="projectName"
+                required
+                onChange={this.onChange}
               />
 
-              <FormControlLabel
-                control={<Checkbox checked={status === "public"} onChange={this.handleCheckboxChange} name="public" />}
-                label="Public"
+              <TextField
+                variant="outlined"
+                fullWidth
+                style={{ margin: "10px", display: "block" }}
+                label="Project Description"
+                name="description"
+                value={description}
+                id="projectDescription"
+                multiline
+                required
+                onChange={this.onChange}
               />
-            </FormGroup>
-          </FormControl>
+
+              <TextField
+                variant="outlined"
+                fullWidth
+                style={{ margin: "10px", display: "block" }}
+                label="Project Repo URL"
+                name="repo_url"
+                value={repo_url}
+                id="projectRepo"
+                required
+                onChange={this.onChange}
+              />
+
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Repo Status</FormLabel>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox checked={status === "private"} onChange={this.handleCheckboxChange} name="private" />}
+                    label="Private"
+                  />
+
+                  <FormControlLabel
+                    control={<Checkbox checked={status === "public"} onChange={this.handleCheckboxChange} name="public" />}
+                    label="Public"
+                  />
+                </FormGroup>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Grid container spacing={3} justify="space-between">
+                {screenshotsToDisplay.length > 0 && screenshotsToDisplay.map((screenshot, index) => (
+                  <ScreenshotItem screenshot={screenshot} key={index} />
+                ))}
+              </Grid>
+            </Grid>
+          </Grid>
 
           <Button style={{ display: "block", margin: "5px" }} className="btn-primary" type="submit">{submitButtonText}</Button>
         </form>
+
+        <CustomSnackbar
+          open={openSnackbar}
+          handleClose={this.handleSnackbarClose}
+          message="Image successfully uploaded to GCS"
+        />
       </Paper>
     )
   }

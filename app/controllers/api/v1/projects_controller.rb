@@ -22,7 +22,12 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def update
-    if @project.update(project_params)
+    params = { name: project_params[:name], description: project_params[:description], repo_url: project_params[:repo_url], status: project_params[:status] }
+    screenshots = project_params[:screenshots].map { |screenshot_param| screenshot_param[:signed_blob_id] }
+
+    @project.update(params)
+
+    if @project.screenshots.attach(screenshots)
       render json: @project
     else
       render json: @project.errors
@@ -31,7 +36,7 @@ class Api::V1::ProjectsController < ApplicationController
 
   def show
     if @project
-      render json: @project.as_json.merge({ screenshots: @project.screenshots.map { |screenshot| screenshot.service_url } })
+      render json: @project.as_json.merge({ screenshots: @project.screenshots.map { |screenshot| { url: screenshot.service_url, filename: screenshot.filename.to_s } } })
     else
       render json: @project.errors
     end
