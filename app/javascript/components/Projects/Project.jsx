@@ -86,9 +86,9 @@ class Project extends React.Component {
 
         {project && project.screenshots.length > 0 && (
           <GridList cellHeight={160} cols={3}>
-            {project.screenshots.map((screenshotUrl, index) => (
+            {project.screenshots.map((screenshot, index) => (
               <GridListTile key={index} cols={1}>
-                <img src={screenshotUrl} alt={`screenshot-${index}`} />
+                <img src={screenshot.url} alt={`screenshot-${index}`} />
               </GridListTile>
             ))}
           </GridList>
