@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Button, TextField, Paper, FormGroup, FormControl, Checkbox, FormLabel, FormControlLabel, Grid, Snackbar, IconButton } from '@material-ui/core'
+import { Button, TextField, Paper, FormGroup, FormControl, Checkbox, FormLabel, FormControlLabel, Grid, LinearProgress } from '@material-ui/core'
 
 import { DropzoneArea } from 'material-ui-dropzone'
 import { DirectUpload } from '@rails/activestorage'
@@ -21,7 +21,8 @@ class ProjectForm extends React.Component {
       screenshots: [], // Array of screenshots to be uploaded to ActiveStorage
       blob_ids: [],
       screenshotsToDisplay: [], // Array of screenshots already attached to the project to be displayed
-      openSnackbar: false
+      openSnackbar: false,
+      uploading: false
     }
   }
 
@@ -67,6 +68,8 @@ class ProjectForm extends React.Component {
   }
 
   uploadFile = (file) => {
+    this.setState({ uploading: true })
+
     const url = "http://localhost:3000/rails/active_storage/direct_uploads"
 
     const upload = new DirectUpload(file, url)
@@ -75,7 +78,7 @@ class ProjectForm extends React.Component {
       if (error) {
         console.log("UPLOAD ERROR", error)
       } else {
-        this.setState(prevState => ({ blob_ids: [...prevState.blob_ids, blob], openSnackbar: true }))
+        this.setState(prevState => ({ blob_ids: [...prevState.blob_ids, blob], openSnackbar: true, uploading: false }))
       }
     })
   }
@@ -90,7 +93,7 @@ class ProjectForm extends React.Component {
 
   render() {
     const { handleSubmit, submitButtonText } = this.props
-    const { name, description, repo_url, status, screenshotsToDisplay, openSnackbar } = this.state
+    const { name, description, repo_url, status, screenshotsToDisplay, openSnackbar, uploading } = this.state
 
     return (
       <Paper style={{ backgroundColor: "#fcfcfc", padding: "2em" }}>
@@ -103,6 +106,8 @@ class ProjectForm extends React.Component {
                 onChange={(files) => { this.handlefieUpload(files) }}
                 onDrop={(files) => { this.onDrop(files) }}
               />
+
+              { uploading && (<LinearProgress />) }
             </Grid>
 
             <Grid item xs={6}>
