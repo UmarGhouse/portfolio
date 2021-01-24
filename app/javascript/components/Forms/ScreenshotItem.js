@@ -5,7 +5,7 @@ import { Grid, Typography, Button, ButtonGroup } from '@material-ui/core'
 import StarIcon from '@material-ui/icons/Star'
 import DeleteIcon from '@material-ui/icons/Delete'
 
-export default function ScreenshotItem({ screenshot }) {
+export default function ScreenshotItem({ screenshot, handleDelete }) {
   return (
     <Grid item>
       <Grid container direction="column" justify="space-between" alignItems="center" spacing={1}>
@@ -20,7 +20,7 @@ export default function ScreenshotItem({ screenshot }) {
         <Grid item xs={12} md={4}>
           <ButtonGroup variant="text">
             <Button><StarIcon /></Button>
-            <Button><DeleteIcon /></Button>
+            <Button><DeleteIcon onClick={() => { handleDelete(screenshot.id) }} /></Button>
           </ButtonGroup>
         </Grid>
       </Grid>

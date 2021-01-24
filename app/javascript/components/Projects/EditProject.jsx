@@ -80,6 +80,7 @@ class EditProject extends React.Component {
 
   render() {
     const { projectData } = this.state
+    const { match: { params: { id } } } = this.props
     
     return (
       <Container>
@@ -88,6 +89,7 @@ class EditProject extends React.Component {
         <ProjectForm
           handleSubmit={this.onSubmit}
           handleChange={this.onChange}
+          projectId={id}
           currentValues={projectData}
           submitButtonText="Save Changes"
         />

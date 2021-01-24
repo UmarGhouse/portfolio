@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       post 'projects/create'
       put 'projects/update/:id', to: 'projects#update', as: 'projects_update'
       get 'projects/show/:id', to: 'projects#show', as: 'projects_show'
+      delete 'projects/screenshots/destroy/:attachment_id', to: 'projects#remove_screenshot', as: 'projects_remove_screenshot'
       delete 'projects/destroy/:id', to: 'projects#destroy', as: 'projects_destroy'
 
       # Skill routes

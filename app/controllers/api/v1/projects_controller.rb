@@ -36,9 +36,19 @@ class Api::V1::ProjectsController < ApplicationController
 
   def show
     if @project
-      render json: @project.as_json.merge({ screenshots: @project.screenshots.map { |screenshot| { url: screenshot.service_url, filename: screenshot.filename.to_s } } })
+      render json: @project.as_json.merge({ screenshots: @project.screenshots.map { |screenshot| { id: screenshot.id, url: screenshot.service_url, filename: screenshot.filename.to_s } } })
     else
       render json: @project.errors
+    end
+  end
+
+  def remove_screenshot
+    screenshot = ActiveStorage::Attachment.find(params[:attachment_id])
+
+    if screenshot.purge
+      render json: { message: "#{screenshot.filename.to_s} deleted" }
+    else
+      render json: screenshot.errors
     end
   end
 

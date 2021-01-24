@@ -7,7 +7,7 @@ import { DirectUpload } from '@rails/activestorage'
 
 import ScreenshotItem from './ScreenshotItem'
 
-import { CustomSnackbar } from '../Blocks'
+import { CustomSnackbar, ConfirmationDialog } from '../Blocks'
 
 class ProjectForm extends React.Component {
   constructor(props) {
@@ -22,7 +22,10 @@ class ProjectForm extends React.Component {
       blob_ids: [],
       screenshotsToDisplay: [], // Array of screenshots already attached to the project to be displayed
       openSnackbar: false,
-      uploading: false
+      uploading: false,
+      openDialog: false,
+      screenshotToDelete: null,
+      deleting: false
     }
   }
 
@@ -63,6 +66,14 @@ class ProjectForm extends React.Component {
     })
   }
 
+  handleDialogOpen = (screenshotToDelete) => {
+    this.setState({ openDialog: true, screenshotToDelete })
+  }
+
+  handleDialogClose = () => {
+    this.setState({ openDialog: false, screenshotToDelete: null })
+  }
+
   onDrop = (files) => {
     files.forEach(file => this.uploadFile(file))
   }
@@ -91,9 +102,39 @@ class ProjectForm extends React.Component {
     this.setState({ openSnackbar: false })
   }
 
+  handleDeleteFile = () => {
+    const { projectId } = this.props
+    const { screenshotToDelete: attachment_id } = this.state
+
+    this.setState({ deleting: true })
+
+    const url = `/api/v1/projects/screenshots/destroy/${attachment_id}`
+
+    const token = document.querySelector('meta[name="csrf-token"]').content
+
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        "X-CSRF-Token": token,
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+        throw new Error("Network response was not OK.")
+      })
+      .then(response => {
+        this.setState({ deleting: false })
+        this.handleDialogClose()
+      })
+      .catch(error => console.error(error.message))
+  }
+
   render() {
     const { handleSubmit, submitButtonText } = this.props
-    const { name, description, repo_url, status, screenshotsToDisplay, openSnackbar, uploading } = this.state
+    const { name, description, repo_url, status, screenshotsToDisplay, openSnackbar, uploading, openDialog, deleting } = this.state
 
     return (
       <Paper style={{ backgroundColor: "#fcfcfc", padding: "2em" }}>
@@ -107,7 +148,7 @@ class ProjectForm extends React.Component {
                 onDrop={(files) => { this.onDrop(files) }}
               />
 
-              { uploading && (<LinearProgress />) }
+              {uploading && (<LinearProgress />)}
             </Grid>
 
             <Grid item xs={6}>
@@ -167,7 +208,7 @@ class ProjectForm extends React.Component {
             <Grid item xs={6}>
               <Grid container spacing={3} justify="space-between">
                 {screenshotsToDisplay.length > 0 && screenshotsToDisplay.map((screenshot, index) => (
-                  <ScreenshotItem screenshot={screenshot} key={index} />
+                  <ScreenshotItem screenshot={screenshot} key={index} handleDelete={this.handleDialogOpen} />
                 ))}
               </Grid>
             </Grid>
@@ -180,6 +221,16 @@ class ProjectForm extends React.Component {
           open={openSnackbar}
           handleClose={this.handleSnackbarClose}
           message="Image successfully uploaded to GCS"
+        />
+
+        <ConfirmationDialog
+          open={openDialog}
+          handleClose={this.handleDialogClose}
+          title='Are you sure you want to delete this screenshot?'
+          content={<>This will <strong>permanently</strong> delete this screenshot. Are you sure?</>}
+          handleSubmit={this.handleDeleteFile}
+          showProgress
+          isSubmitting={deleting}
         />
       </Paper>
     )
