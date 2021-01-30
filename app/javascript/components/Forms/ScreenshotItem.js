@@ -20,7 +20,7 @@ export default function ScreenshotItem({ screenshot, handleDelete }) {
         <Grid item xs={12} md={4}>
           <ButtonGroup variant="text">
             <Button><StarIcon /></Button>
-            <Button><DeleteIcon onClick={() => { handleDelete(screenshot.id) }} /></Button>
+            <Button><DeleteIcon onClick={() => { handleDelete(screenshot) }} /></Button>
           </ButtonGroup>
         </Grid>
       </Grid>

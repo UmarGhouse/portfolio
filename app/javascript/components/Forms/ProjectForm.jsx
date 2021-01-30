@@ -17,9 +17,8 @@ class ProjectForm extends React.Component {
       name: "", // String - name of the project
       description: "", // Rich Text Description of the project
       repo_url: "", // Link to Github repo
-      status: "private", // Notes whether Github repo is private/public
-      screenshots: [], // Array of screenshots to be uploaded to ActiveStorage
-      blob_ids: [],
+      status: "private", // Notes whether Github repo is private/public 
+      blob_ids: [], // Array of screenshot blob_ids after uploading to ActiveStorage
       screenshotsToDisplay: [], // Array of screenshots already attached to the project to be displayed
       openSnackbar: false,
       uploading: false,
@@ -94,21 +93,17 @@ class ProjectForm extends React.Component {
     })
   }
 
-  handlefieUpload = (files) => {
-    this.setState(prevState => ({ screenshots: [...prevState.screenshots, ...files] }))
-  }
-
   handleSnackbarClose = () => {
     this.setState({ openSnackbar: false })
   }
 
   handleDeleteFile = () => {
     const { projectId } = this.props
-    const { screenshotToDelete: attachment_id } = this.state
+    const { screenshotToDelete } = this.state
 
     this.setState({ deleting: true })
 
-    const url = `/api/v1/projects/screenshots/destroy/${attachment_id}`
+    const url = `/api/v1/projects/screenshots/destroy/${screenshotToDelete.id}`
 
     const token = document.querySelector('meta[name="csrf-token"]').content
 
@@ -128,13 +123,26 @@ class ProjectForm extends React.Component {
       .then(response => {
         this.setState({ deleting: false })
         this.handleDialogClose()
+
+        const screenshotUrl = `/api/v1/projects/${projectId}/screenshots`
+
+        fetch(screenshotUrl)
+          .then(response => {
+            if (response.ok) {
+              return response.json()
+            }
+
+            throw new Error("Network reponse was not OK")
+          })
+          .then(response => { this.setState({ screenshotsToDisplay: response }) })
+          .catch((error) => console.log(error))
       })
       .catch(error => console.error(error.message))
   }
 
   render() {
     const { handleSubmit, submitButtonText } = this.props
-    const { name, description, repo_url, status, screenshotsToDisplay, openSnackbar, uploading, openDialog, deleting } = this.state
+    const { name, description, repo_url, status, screenshotsToDisplay, openSnackbar, uploading, openDialog, deleting, screenshotToDelete } = this.state
 
     return (
       <Paper style={{ backgroundColor: "#fcfcfc", padding: "2em" }}>
@@ -144,7 +152,6 @@ class ProjectForm extends React.Component {
               <DropzoneArea
                 acceptedFiles={['image/*']}
                 dropzoneText={"Drag and drop an image here or click"}
-                onChange={(files) => { this.handlefieUpload(files) }}
                 onDrop={(files) => { this.onDrop(files) }}
               />
 
@@ -227,7 +234,7 @@ class ProjectForm extends React.Component {
           open={openDialog}
           handleClose={this.handleDialogClose}
           title='Are you sure you want to delete this screenshot?'
-          content={<>This will <strong>permanently</strong> delete this screenshot. Are you sure?</>}
+          content={<>This will <strong>permanently</strong> delete the "{screenshotToDelete && screenshotToDelete.filename}" screenshot. Are you sure?</>}
           handleSubmit={this.handleDeleteFile}
           showProgress
           isSubmitting={deleting}

@@ -1,5 +1,5 @@
 class Api::V1::ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :update, :destroy]
+  before_action :set_project, only: [:show, :update, :destroy, :get_screenshots]
 
   def index
     projects = Project.all.order(created_at: :desc)
@@ -39,6 +39,16 @@ class Api::V1::ProjectsController < ApplicationController
       render json: @project.as_json.merge({ screenshots: @project.screenshots.map { |screenshot| { id: screenshot.id, url: screenshot.service_url, filename: screenshot.filename.to_s } } })
     else
       render json: @project.errors
+    end
+  end
+
+  def get_screenshots
+    screenshots = @project.screenshots.map { |screenshot| { id: screenshot.id, url: screenshot.service_url, filename: screenshot.filename.to_s } }
+
+    if screenshots
+      render json: screenshots
+    else
+      render json: screenshots.errors
     end
   end
 
