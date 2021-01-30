@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 
 import { Button, TextField, Paper, FormGroup, FormControl, Checkbox, FormLabel, FormControlLabel, Grid, LinearProgress } from '@material-ui/core'
 
@@ -21,10 +22,12 @@ class ProjectForm extends React.Component {
       blob_ids: [], // Array of screenshot blob_ids after uploading to ActiveStorage
       screenshotsToDisplay: [], // Array of screenshots already attached to the project to be displayed
       openSnackbar: false,
+      snackbarMessage: '',
       uploading: false,
       openDialog: false,
-      screenshotToDelete: null,
-      deleting: false
+      selectedScreenshot: null,
+      deleting: false,
+      loading: false
     }
   }
 
@@ -65,12 +68,12 @@ class ProjectForm extends React.Component {
     })
   }
 
-  handleDialogOpen = (screenshotToDelete) => {
-    this.setState({ openDialog: true, screenshotToDelete })
+  handleDialogOpen = (selectedScreenshot) => {
+    this.setState({ openDialog: true, selectedScreenshot })
   }
 
   handleDialogClose = () => {
-    this.setState({ openDialog: false, screenshotToDelete: null })
+    this.setState({ openDialog: false, selectedScreenshot: null })
   }
 
   onDrop = (files) => {
@@ -88,22 +91,63 @@ class ProjectForm extends React.Component {
       if (error) {
         console.log("UPLOAD ERROR", error)
       } else {
-        this.setState(prevState => ({ blob_ids: [...prevState.blob_ids, blob], openSnackbar: true, uploading: false }))
+        this.setState(prevState => ({ blob_ids: [...prevState.blob_ids, blob], openSnackbar: true, snackbarMessage: "Image successfully uploaded to GCS", uploading: false }))
       }
     })
   }
 
   handleSnackbarClose = () => {
-    this.setState({ openSnackbar: false })
+    this.setState({ openSnackbar: false, snackbarMessage: '' })
+  }
+
+  handleFeaturedImage = (screenshot) => {
+    const { projectId } = this.props
+
+    this.setState({ loading: true, selectedScreenshot: screenshot })
+
+    const url = `/api/v1/projects/${projectId}/screenshots/make_featured/${screenshot.id}`
+
+    const token = document.querySelector('meta[name="csrf-token"]').content
+
+    fetch(url, {
+      method: 'PUT',
+      headers: {
+        "X-CSRF-Token": token,
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+        throw new Error("Network response was not OK.")
+      })
+      .then(response => {
+        this.setState({ loading: false, selectedScreenshot: null })
+
+        const screenshotUrl = `/api/v1/projects/${projectId}/screenshots`
+
+        fetch(screenshotUrl)
+          .then(response => {
+            if (response.ok) {
+              return response.json()
+            }
+
+            throw new Error("Network reponse was not OK")
+          })
+          .then(response => { this.setState({ screenshotsToDisplay: response, openSnackbar: true, snackbarMessage: `${screenshot.filename} set as featured image` }) })
+          .catch((error) => console.log(error))
+      })
+      .catch(error => console.error(error.message))
   }
 
   handleDeleteFile = () => {
     const { projectId } = this.props
-    const { screenshotToDelete } = this.state
+    const { selectedScreenshot } = this.state
 
     this.setState({ deleting: true })
 
-    const url = `/api/v1/projects/screenshots/destroy/${screenshotToDelete.id}`
+    const url = `/api/v1/projects/screenshots/destroy/${selectedScreenshot.id}`
 
     const token = document.querySelector('meta[name="csrf-token"]').content
 
@@ -142,7 +186,7 @@ class ProjectForm extends React.Component {
 
   render() {
     const { handleSubmit, submitButtonText } = this.props
-    const { name, description, repo_url, status, screenshotsToDisplay, openSnackbar, uploading, openDialog, deleting, screenshotToDelete } = this.state
+    const { name, description, repo_url, status, screenshotsToDisplay, openSnackbar, snackbarMessage, uploading, openDialog, deleting, selectedScreenshot, loading } = this.state
 
     return (
       <Paper style={{ backgroundColor: "#fcfcfc", padding: "2em" }}>
@@ -214,8 +258,15 @@ class ProjectForm extends React.Component {
 
             <Grid item xs={6}>
               <Grid container spacing={3} justify="space-between">
-                {screenshotsToDisplay.length > 0 && screenshotsToDisplay.map((screenshot, index) => (
-                  <ScreenshotItem screenshot={screenshot} key={index} handleDelete={this.handleDialogOpen} />
+                {screenshotsToDisplay.length > 0 && _.sortBy(screenshotsToDisplay, ['filename']).map((screenshot, index) => (
+                  <ScreenshotItem 
+                    screenshot={screenshot} 
+                    key={index} 
+                    handleDelete={this.handleDialogOpen} 
+                    handleFeatured={this.handleFeaturedImage} 
+                    loading={loading}
+                    selectedScreenshot={selectedScreenshot} 
+                  />
                 ))}
               </Grid>
             </Grid>
@@ -227,14 +278,14 @@ class ProjectForm extends React.Component {
         <CustomSnackbar
           open={openSnackbar}
           handleClose={this.handleSnackbarClose}
-          message="Image successfully uploaded to GCS"
+          message={snackbarMessage}
         />
 
         <ConfirmationDialog
           open={openDialog}
           handleClose={this.handleDialogClose}
           title='Are you sure you want to delete this screenshot?'
-          content={<>This will <strong>permanently</strong> delete the "{screenshotToDelete && screenshotToDelete.filename}" screenshot. Are you sure?</>}
+          content={<>This will <strong>permanently</strong> delete the "{selectedScreenshot && selectedScreenshot.filename}" screenshot. Are you sure?</>}
           handleSubmit={this.handleDeleteFile}
           showProgress
           isSubmitting={deleting}
