@@ -28,7 +28,7 @@ class Projects extends Component {
 
 				throw new Error("Network response was not OK")
 			})
-			.then(response => this.setState({ projects: response }, () => console.log(this.state.projects)))
+			.then(response => this.setState({ projects: response }))
 			.catch(() => this.props.history.push("/"))
 	}
 
