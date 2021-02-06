@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { Container, Typography, Button, Tooltip } from '@material-ui/core'
+import { Container, Typography, Button, Tooltip, GridList, GridListTile, GridListTileBar, IconButton } from '@material-ui/core'
+import StarIcon from '@material-ui/icons/Star'
 
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
@@ -62,14 +63,14 @@ class Project extends React.Component {
       .catch(error => console.error(error.message))
   }
 
-  
+
   render() {
     const { project } = this.state
-    
+
     const showRepoButton = (
       <>
-        {project && project.status === "public" ? 
-          (<Tooltip title={project && project.repo_url}><a href={project ? project.repo_url : "#"} target="_blank"><OpenInNewIcon /></a></Tooltip>) 
+        {project && project.status === "public" ?
+          (<Tooltip title={project && project.repo_url}><a href={project ? project.repo_url : "#"} target="_blank"><OpenInNewIcon /></a></Tooltip>)
           : (
             <Tooltip title="Private repo">
               <VisibilityOffIcon />
@@ -77,12 +78,32 @@ class Project extends React.Component {
           )}
       </>
     )
-    
+
     return (
       <Container>
         <h1>
           {project ? project.name : "Loading..."} {showRepoButton}
         </h1>
+
+        {project && project.screenshots.length > 0 && (
+          <GridList cellHeight={160} cols={3}>
+            {project.screenshots.map((screenshot, index) => (
+              <GridListTile key={index} cols={1} style={{ backgroundSize: 'contained', backgroundRepeat: 'no-repeat' }}>
+                <img src={screenshot.url} alt={`screenshot-${index}`} />
+                <GridListTileBar
+                  title={screenshot.filename}
+                  actionIcon={
+                    screenshot.featured ? (
+                      <IconButton aria-label='featured'>
+                        <StarIcon style={{ color: '#ffffff' }} />
+                      </IconButton>
+                    ) : null
+                  }
+                />
+              </GridListTile>
+            ))}
+          </GridList>
+        )}
 
         <Typography>
           {project ? project.description : "Loading..."}
@@ -90,12 +111,12 @@ class Project extends React.Component {
 
         {project && (<LinkButton variant="outlined" className="btn-primary" href={`/project/${project.id}/edit`}>Edit this project</LinkButton>)}
 
-        <br/>
+        <br />
 
         <Button variant="outlined" className="btn-secondary" onClick={this.deleteProject}>Delete Project</Button>
-        
-        <br/>
-        
+
+        <br />
+
         <LinkButton variant="outlined" className="btn-secondary" href="/projects">Back to all projects</LinkButton>
       </Container>
     )

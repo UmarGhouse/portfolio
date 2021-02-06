@@ -36,7 +36,7 @@ class Projects extends Component {
 
 		const allProjects = projects.map((project, index) => (
 			<Grid item xs={11} md={3} key={index} className="project-grid-item">
-				<Card style={{ backgroundColor: "#2c3a41" }}>
+				<Card>
 					<CardContent>
 						<h2>{project.name}</h2>
 						<p>{project.description}</p>

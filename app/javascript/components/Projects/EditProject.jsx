@@ -42,15 +42,19 @@ class EditProject extends React.Component {
 
     event.preventDefault()
     const url = `/api/v1/projects/update/${id}`
-    const { name, description, repo_url, status } = formData
+    const { name, description, repo_url, status, screenshots, blob_ids } = formData
 
     if (name.length == 0 | description.length == 0) return
+
+    const formattedBlobIds = []
+    blob_ids.map(blob => (formattedBlobIds.push({ signed_blob_id: blob.signed_id })))
 
     const body = {
       name,
       description: description.replace(/\n/g, "<br> <br>"),
       repo_url,
-      status
+      status,
+      screenshots: formattedBlobIds
     }
 
     const token = document.querySelector('meta[name="csrf-token"]').content
@@ -60,7 +64,7 @@ class EditProject extends React.Component {
         "X-CSRF-Token": token,
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify({ project: body})
     })
       .then(response => {
         if (response.ok) {
@@ -68,12 +72,15 @@ class EditProject extends React.Component {
         }
         throw new Error("Network response was not OK.")
       })
-      .then(response => this.props.history.push(`/project/${response.id}`))
+      .then(response => {
+        this.props.history.push(`/project/${response.id}`)
+      })
       .catch(error => console.error(error.message))
   }
 
   render() {
     const { projectData } = this.state
+    const { match: { params: { id } } } = this.props
     
     return (
       <Container>
@@ -82,6 +89,7 @@ class EditProject extends React.Component {
         <ProjectForm
           handleSubmit={this.onSubmit}
           handleChange={this.onChange}
+          projectId={id}
           currentValues={projectData}
           submitButtonText="Save Changes"
         />
