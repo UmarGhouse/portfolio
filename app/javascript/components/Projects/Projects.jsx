@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import _ from 'lodash'
 
-import { Container, Grid, Tooltip, Card, CardContent, CardActions } from '@material-ui/core'
+import { Container, Grid, Tooltip, Card, CardContent, CardActions, CardMedia } from '@material-ui/core'
+import Skeleton from '@material-ui/lab/Skeleton'
 
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
@@ -27,7 +28,7 @@ class Projects extends Component {
 
 				throw new Error("Network response was not OK")
 			})
-			.then(response => this.setState({ projects: response }))
+			.then(response => this.setState({ projects: response }, () => console.log(this.state.projects)))
 			.catch(() => this.props.history.push("/"))
 	}
 
@@ -37,6 +38,11 @@ class Projects extends Component {
 		const allProjects = projects.map((project, index) => (
 			<Grid item xs={11} md={3} key={index} className="project-grid-item">
 				<Card>
+					<CardMedia
+						image={project.featured_screenshot ? project.featured_screenshot.url : 'https://via.placeholder.com/150'}
+						title={project.featured_screenshot ? project.featured_screenshot.filename : 'No image yet. Upload something!'}
+						style={{ height: '150px' }}
+					/>
 					<CardContent>
 						<h2>{project.name}</h2>
 						<p>{project.description}</p>
@@ -55,7 +61,7 @@ class Projects extends Component {
 					</CardContent>
 
 					<CardActions>
-						<LinkButton className='btn-secondary' variant='outlined' href={`/project/${project.id}`}>
+						<LinkButton size="small" variant='text' href={`/project/${project.id}`}>
 							View Project
 						</LinkButton>
 					</CardActions>
@@ -63,15 +69,11 @@ class Projects extends Component {
 			</Grid>
 		))
 
-		const noProject = (
-			<Grid item xs={12}>
-				<h2>
-					No projects yet.
-				</h2>
-
-				<p>Why not <Link to="/new_project">create one</Link>.</p>
+		const noProject = _.times(8, (i) => (
+			<Grid item xs={11} md={3} key={i} className="project-grid-item">
+				<Skeleton variant="rect" width={300} height={300} />
 			</Grid>
-		)
+		))
 
 		return (
 			<Container>

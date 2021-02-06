@@ -2,8 +2,21 @@ class Api::V1::ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :update, :destroy, :get_screenshots, :make_screenshot_featured]
 
   def index
-    projects = Project.all.order(created_at: :desc)
-    render json: projects
+    projects = Project.with_attached_screenshots.all.order(created_at: :desc)
+
+    projects_with_screenshots = []
+
+    projects.map do |project|
+      featured_screenshot = project.screenshots.find_by(featured: true)
+
+      if featured_screenshot
+        projects_with_screenshots.push({ featured_screenshot: { filename: featured_screenshot.filename.to_s, url: featured_screenshot.service_url }, **project.as_json })
+      else
+        projects_with_screenshots.push({ featured_screenshot: nil, **project.as_json })
+      end  
+    end
+
+    render json: projects_with_screenshots
   end
 
   def create
