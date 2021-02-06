@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { Container, Typography, Button, Tooltip, GridList, GridListTile, GridListTileBar } from '@material-ui/core'
+import { Container, Typography, Button, Tooltip, GridList, GridListTile, GridListTileBar, IconButton } from '@material-ui/core'
+import StarIcon from '@material-ui/icons/Star'
 
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
@@ -91,11 +92,13 @@ class Project extends React.Component {
                 <img src={screenshot.url} alt={`screenshot-${index}`} />
                 <GridListTileBar
                   title={screenshot.filename}
-                  // actionIcon={
-                  //   <IconButton aria-label={`info about ${tile.title}`} className={classes.icon}>
-                  //     <InfoIcon />
-                  //   </IconButton>
-                  // }
+                  actionIcon={
+                    screenshot.featured ? (
+                      <IconButton aria-label='featured'>
+                        <StarIcon style={{ color: '#ffffff' }} />
+                      </IconButton>
+                    ) : null
+                  }
                 />
               </GridListTile>
             ))}

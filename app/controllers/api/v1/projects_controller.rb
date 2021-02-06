@@ -37,7 +37,7 @@ class Api::V1::ProjectsController < ApplicationController
   def show
     screenshots = []
     
-    @project.screenshots.map do |screenshot| 
+    @project.screenshots.order('featured DESC').map do |screenshot| 
       screenshots.push({ id: screenshot.id, url: screenshot.service_url, filename: screenshot.filename.to_s, featured: screenshot.featured })
     end
 
