@@ -1,9 +1,15 @@
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
-import { AppBar, Toolbar, Typography, Button, Link, makeStyles } from '@material-ui/core'
+import { AppBar, Toolbar, Typography, Button, makeStyles, Container, useScrollTrigger, Link } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
+  appbar: {
+    backgroundColor: 'rgba(252,252,252,0)'
+  },
+  appBarSolid: {
+    backgroundColor: 'rgba(252,252,252,1)'
+  },
   title: {
     marginRight: 'auto'
   },
@@ -25,33 +31,54 @@ const useStyles = makeStyles((theme) => ({
       display: "inherit",
       width: "auto",
     },
+  },
+  navLink: {
+    padding: '5px',
+    margin: '10px'
   }
 }))
 
-export default function NavBar() {
+export default function NavBar(props) {
   const classes = useStyles()
+
+  function ElevationScroll(props) {
+    const { children } = props
+    const trigger = useScrollTrigger({
+      disableHysteresis: true,
+      threshold: 0,
+    })
+  
+    return React.cloneElement(children, {
+      elevation: trigger ? 4 : 0,
+      className: trigger ? classes.appBarSolid : classes.appbar
+    })
+  }
 
   return (
     <>
-      <AppBar position="fixed">
-        <Toolbar>
-          <Button component={RouterLink} to='/' className={classes.title}>
-            <Typography>
-              Umar Ghouse
-            </Typography>
-          </Button>
+      <ElevationScroll {...props}>
+        <AppBar position="fixed">
+          <Container>
+            <Toolbar className={classes.toolbar}>
+              <Link component={RouterLink} to='/' className={classes.title}>
+                <Typography variant="h4">
+                  <strong>Umar Ghouse</strong>
+                </Typography>
+              </Link>
 
-          <div className={classes.navLinksContainer}>
-            <Button component={RouterLink} to='/projects'>
-              <Typography>Projects</Typography>
-            </Button>
+              <div className={classes.navLinksContainer}>
+                <Link component={RouterLink} to='/projects' className={classes.navLink}>
+                  <Typography>Projects</Typography>
+                </Link>
 
-            <Button component={RouterLink} to='/about'>
-              <Typography>About</Typography>
-            </Button>
-          </div>
-        </Toolbar>
-      </AppBar>
+                <Link component={RouterLink} to='/about' className={classes.navLink}>
+                  <Typography>About</Typography>
+                </Link>
+              </div>
+            </Toolbar>
+          </Container>
+        </AppBar>
+      </ElevationScroll>
 
       <div className={classes.toolbarMixin} />
     </>

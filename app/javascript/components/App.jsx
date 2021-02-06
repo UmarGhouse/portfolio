@@ -5,7 +5,7 @@ import { NavBar } from "./Blocks";
 
 export default props => (
   <Router>
-    <NavBar />
+    <NavBar {...props} />
 
     {Routes}
   </Router>
