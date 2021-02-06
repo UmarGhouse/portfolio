@@ -5,6 +5,7 @@ import { Button, withStyles } from '@material-ui/core'
 const styles = (theme) => ({
   buttonSpacing: {
     margin: '5px',
+    marginBottom: '15px',
     paddingTop: '10px',
     paddingBottom: '10px',
     paddingLeft: '20px',
@@ -19,8 +20,8 @@ const styles = (theme) => ({
   }
 })
 
-const LinkButton = ({className, variant, href, classes, children}) => (
-  <Button className={className} classes={{ root: classes.buttonSpacing, label: classes.buttonLabel }} variant={variant} component={Link} to={href}>
+const LinkButton = ({className, variant, href, classes, children, size}) => (
+  <Button className={className} size={size} classes={{ root: classes.buttonSpacing, label: classes.buttonLabel }} variant={variant} component={Link} to={href}>
     {children}
   </Button>
 )

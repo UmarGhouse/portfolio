@@ -5,11 +5,22 @@
 import React from "react";
 import { render } from "react-dom";
 
+import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles'
+
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: [
+      'Montserrat',
+      'sans-serif'
+    ]
+  },
+});
+
 import App from "../components/App";
 
 document.addEventListener("DOMContentLoaded", () => {
   render(
-    <App />,
+    <ThemeProvider theme={theme} ><App /></ThemeProvider>,
     document.body.appendChild(document.createElement("div"))
   );
 });

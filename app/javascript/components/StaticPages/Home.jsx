@@ -34,7 +34,6 @@ export default () => (
 			</Grid>
 			<Grid item xs={12} md={4}>
 				<img src={heroImage} className='hero-image' />
-				<div className="hero-image-background" />
 			</Grid>
 		</Grid>
 

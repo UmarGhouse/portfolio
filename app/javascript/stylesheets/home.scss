@@ -15,7 +15,7 @@
   font-family: $headerType;
   word-wrap: break-word;
   opacity: 0.5;
-  color: lighten($color: $baseColor, $amount: 7);
+  color: darken($color: $baseColor, $amount: 7);
 
   @media screen and (max-width: 600px) {
     font-size: 5rem;
@@ -56,23 +56,6 @@
   max-height: 100%;
   width: 25vw;
   border-radius: 1rem;
-
-  @media screen and (max-width: 600px) {
-    width: 100%;
-  }
-}
-
-.hero-image-background {
-  position: absolute;
-  max-height: 75%;
-  width: 25vw;
-  top: 2.5rem;
-  bottom: 5rem;
-  background: darken($color: $secondaryColor, $amount: 25);
-  border-radius: 1rem;
-  transform: rotate(-3deg);
-  z-index: -1;
-  opacity: 0.45;
 
   @media screen and (max-width: 600px) {
     width: 100%;

@@ -6,15 +6,17 @@
 body {
   background-color: $baseColor;
   color: $accentWhite;
-  font-family: $bodyType;
 
   a {
     color: $accentRed !important;
-    text-decoration: none;
+  }
+
+  a, a:hover {
+    text-decoration: none !important;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: $headerType;
+    font-family: $headerType !important;
   }
 }
 
