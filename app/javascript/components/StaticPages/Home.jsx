@@ -109,8 +109,8 @@ export default () => {
 					</Grid>
 					<Grid item>
 						{latestProjects.length > 0 && latestProjects.map((project, index) => (
-							<Grid container justify="space-between" alignItems="center" spacing={5} direction={index % 2 === 0 ? "row" : "row-reverse"}>
-								<Grid item key={project.id} xs={12} md={6}>
+							<Grid container key={project.id} justify="space-between" alignItems="center" spacing={5} direction={index % 2 === 0 ? "row" : "row-reverse"}>
+								<Grid item xs={12} md={6}>
 									<Typography variant="h3">
 										{project.name}
 									</Typography>

@@ -14,7 +14,7 @@ export default function Footer() {
       <Grid container justify="space-between" alignItems="center" spacing={3}>
         <Grid item>
           <Typography>
-            &copy; Umar Ghouse, 2021
+            &copy; Umar Ghouse, {(new Date().getFullYear())}
           </Typography>
         </Grid>
 
