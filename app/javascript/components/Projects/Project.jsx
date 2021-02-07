@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { Container, Typography, Button, Tooltip, GridList, GridListTile, GridListTileBar, IconButton } from '@material-ui/core'
+import ImageGallery from 'react-image-gallery'
+import { Container, Typography, Button, Tooltip, Grid } from '@material-ui/core'
 import StarIcon from '@material-ui/icons/Star'
 
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
@@ -13,7 +14,8 @@ class Project extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      project: null
+      project: null,
+      images: null
     }
   }
 
@@ -30,7 +32,27 @@ class Project extends React.Component {
 
         throw new Error("Network reponse was not OK")
       })
-      .then(response => { this.setState({ project: response }) })
+      .then(response => {
+        const images = []
+
+        if (response.screenshots.length > 0) {
+          response.screenshots.map(screenshot => (
+            images.push({
+              original: screenshot.url,
+              originalAlt: screenshot.filename,
+              originalTitle: screenshot.filename,
+              thumbnail: screenshot.url,
+              thumbnailAlt: screenshot.filename,
+              thumbnailTitle: screenshot.filename,
+            })
+          ))
+        }
+
+        this.setState({ 
+          project: response,
+          images: images.length > 0 ? images : null
+        }) 
+      })
       .catch((error) => console.log(error))
   }
 
@@ -65,7 +87,7 @@ class Project extends React.Component {
 
 
   render() {
-    const { project } = this.state
+    const { project, images } = this.state
 
     const showRepoButton = (
       <>
@@ -85,29 +107,19 @@ class Project extends React.Component {
           {project ? project.name : "Loading..."} {showRepoButton}
         </h1>
 
-        {project && project.screenshots.length > 0 && (
-          <GridList cellHeight={160} cols={3}>
-            {project.screenshots.map((screenshot, index) => (
-              <GridListTile key={index} cols={1} style={{ backgroundSize: 'contained', backgroundRepeat: 'no-repeat' }}>
-                <img src={screenshot.url} alt={`screenshot-${index}`} />
-                <GridListTileBar
-                  title={screenshot.filename}
-                  actionIcon={
-                    screenshot.featured ? (
-                      <IconButton aria-label='featured'>
-                        <StarIcon style={{ color: '#ffffff' }} />
-                      </IconButton>
-                    ) : null
-                  }
-                />
-              </GridListTile>
-            ))}
-          </GridList>
-        )}
+        <Grid container justify="space-between" alignItems="flex-start" spacing={5}>
+          <Grid item xs={12} md={6}>
+            <Typography>
+              {project ? project.description : "Loading..."}
+            </Typography>
+          </Grid>
 
-        <Typography>
-          {project ? project.description : "Loading..."}
-        </Typography>
+          <Grid item xs={12} md={6}>
+            {images && (
+              <ImageGallery items={images} thumbnailPosition="right" showPlayButton={false} showNav={false} height={750} />
+            )}
+          </Grid>
+        </Grid>
 
         {project && (<LinkButton variant="outlined" className="btn-primary" href={`/project/${project.id}/edit`}>Edit this project</LinkButton>)}
 
