@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       # Project routes
       get 'projects/index'
+      get 'projects/latest', to: 'projects#latest', as: 'projects_latest'
       post 'projects/create'
       put 'projects/update/:id', to: 'projects#update', as: 'projects_update'
       get 'projects/show/:id', to: 'projects#show', as: 'projects_show'

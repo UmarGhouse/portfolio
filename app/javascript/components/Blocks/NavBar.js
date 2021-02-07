@@ -71,6 +71,10 @@ export default function NavBar(props) {
                   <Typography>Projects</Typography>
                 </Link>
 
+                <Link href='https://www.umarghouse.com/' className={classes.navLink}>
+                  <Typography>Blog</Typography>
+                </Link>
+
                 <Link component={RouterLink} to='/about' className={classes.navLink}>
                   <Typography>About</Typography>
                 </Link>

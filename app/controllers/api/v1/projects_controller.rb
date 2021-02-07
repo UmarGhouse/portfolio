@@ -19,6 +19,24 @@ class Api::V1::ProjectsController < ApplicationController
     render json: projects_with_screenshots
   end
 
+  def latest
+    projects = Project.with_attached_screenshots.all.order(created_at: :desc).limit(3)
+
+    projects_with_screenshots = []
+
+    projects.map do |project|
+      featured_screenshot = project.screenshots.find_by(featured: true)
+
+      if featured_screenshot
+        projects_with_screenshots.push({ featured_screenshot: { filename: featured_screenshot.filename.to_s, url: featured_screenshot.service_url }, **project.as_json })
+      else
+        projects_with_screenshots.push({ featured_screenshot: nil, **project.as_json })
+      end  
+    end
+
+    render json: projects_with_screenshots
+  end
+
   def create
     params = { name: project_params[:name], description: project_params[:description], repo_url: project_params[:repo_url], status: project_params[:status] }
     screenshots = project_params[:screenshots].map { |screenshot_param| screenshot_param[:signed_blob_id] }

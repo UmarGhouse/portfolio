@@ -6,6 +6,7 @@
 body {
   background-color: $baseColor;
   color: $accentWhite;
+  min-width: 100%;
 
   a {
     color: $accentRed !important;
@@ -39,4 +40,8 @@ body {
   border-color: $accentWhite !important;
   background-color: $accentWhite !important;
   color: $secondaryColor !important;
+}
+
+.footer-link {
+  padding: 10px;
 }
