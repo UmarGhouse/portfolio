@@ -21,7 +21,17 @@ const styles = (theme) => ({
 })
 
 const LinkButton = ({className, variant, href, classes, children, size}) => (
-  <Button className={className} size={size} classes={{ root: classes.buttonSpacing, label: classes.buttonLabel }} variant={variant} component={Link} to={href}>
+  <Button 
+    className={className} 
+    size={size} 
+    classes={{ 
+      root: size === "small" ? null : classes.buttonSpacing, 
+      label: size === "small" ? null : classes.buttonLabel 
+    }} 
+    variant={variant} 
+    component={Link} 
+    to={href}
+  >
     {children}
   </Button>
 )

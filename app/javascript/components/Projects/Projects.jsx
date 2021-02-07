@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import _ from 'lodash'
 
-import { Container, Grid, Tooltip, Card, CardContent, CardActions, CardMedia } from '@material-ui/core'
+import { Container, Grid, Tooltip, Card, CardContent, CardActions, CardMedia, Typography } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
 
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 
 import { LinkButton } from '../Blocks'
 
@@ -44,26 +45,32 @@ class Projects extends Component {
 						style={{ height: '150px' }}
 					/>
 					<CardContent>
-						<h2>{project.name}</h2>
-						<p>{project.description}</p>
-				
-						<p>
-							{project.status === "private" ? (
-								<Tooltip title="Private repo">
-									<VisibilityOffIcon />
-								</Tooltip>
-							) : (
+						<h2>
+							{project.name}
+						</h2>
+						{project.status === "private" ? (
+							<Tooltip title="Private repo">
+								<VisibilityOffIcon />
+							</Tooltip>
+						) : (
 								<Tooltip title="Public repo">
 									<VisibilityIcon />
 								</Tooltip>
 							)}
-						</p>
+
+						<Typography>{project.description}</Typography>
 					</CardContent>
 
 					<CardActions>
 						<LinkButton size="small" variant='text' href={`/project/${project.id}`}>
 							View Project
 						</LinkButton>
+
+						{project.status === "public" ? (
+							<LinkButton size="small" variant='text' href={project.repo_url}>
+								View Website
+							</LinkButton>
+							) : null}
 					</CardActions>
 				</Card>
 			</Grid>
