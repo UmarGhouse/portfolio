@@ -75,7 +75,7 @@ export default function NavBar(props) {
                   <Typography className={classes.navLinkText}>Projects</Typography>
                 </Link>
 
-                <Link href='https://www.umarghouse.com/' className={classes.navLink}>
+                <Link href='https://www.umarghouse.com/' target="_blank" className={classes.navLink}>
                   <Typography>Blog</Typography>
                 </Link>
 
