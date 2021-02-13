@@ -5,6 +5,7 @@ import { Container, Grid, Icon, Typography, Link } from '@material-ui/core'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 
 import { LinkButton, Footer } from '../Blocks'
+import { SanitizeHTML } from '../Utilities'
 
 import heroImage from '../../../assets/images/hero-image.svg'
 
@@ -114,9 +115,14 @@ export default () => {
 									<Typography variant="h3">
 										{project.name}
 									</Typography>
+
 									<Typography variant="h5" className="project-section-text">
-										{project.description}
+										<SanitizeHTML html={_.replace(project.description.substring(0, 200), /\\n/g, " ") + "..."} />
 									</Typography>
+
+									<LinkButton className='btn-secondary' variant='outlined' href={`/project/${project.id}`}>
+										Check it out
+									</LinkButton>
 								</Grid>
 
 								<Grid item xs={12} md={6}>

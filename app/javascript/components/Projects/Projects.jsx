@@ -9,6 +9,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 
 import { LinkButton, Footer } from '../Blocks'
+import { SanitizeHTML } from '../Utilities'
 
 class Projects extends Component {
 	constructor(props) {
@@ -59,7 +60,9 @@ class Projects extends Component {
 									</Tooltip>
 								)}
 
-							<Typography>{_.replace(project.description.substring(0, 150), /\\n/g, " ") + "..."}</Typography>
+							<Typography>
+								<SanitizeHTML html={_.replace(project.description.substring(0, 150), /\\n/g, " ") + "..."} />
+							</Typography>
 						</CardContent>
 					</Card>
 				</Link>

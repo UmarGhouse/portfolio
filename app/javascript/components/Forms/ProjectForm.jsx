@@ -1,7 +1,9 @@
 import React from 'react'
 import _ from 'lodash'
 
-import { Button, TextField, Paper, FormGroup, FormControl, Checkbox, FormLabel, FormControlLabel, Grid, LinearProgress } from '@material-ui/core'
+import { Editor } from '@tinymce/tinymce-react'
+import { Button, TextField, Paper, FormGroup, FormControl, Checkbox, FormLabel, FormControlLabel, Grid, LinearProgress, Typography } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert'
 
 import { DropzoneArea } from 'material-ui-dropzone'
 import { DirectUpload } from '@rails/activestorage'
@@ -58,6 +60,10 @@ class ProjectForm extends React.Component {
 
   onChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
+  }
+
+  handleEditorChange = (content, editor) => {
+    this.setState({ description: content })
   }
 
   handleCheckboxChange = (event) => {
@@ -189,13 +195,13 @@ class ProjectForm extends React.Component {
     const { name, description, repo_url, status, screenshotsToDisplay, openSnackbar, snackbarMessage, uploading, openDialog, deleting, selectedScreenshot, loading } = this.state
 
     return (
-      <Paper style={{ backgroundColor: "#fcfcfc", padding: "2em" }}>
+      <Paper style={{ backgroundColor: "#fcfcfc", padding: "2em", margin: '1em auto' }} elevation={3}>
         <form onSubmit={(event) => { handleSubmit(event, this.state) }}>
           <Grid container spacing={5} justify="space-between">
             <Grid item xs={12}>
               <DropzoneArea
                 acceptedFiles={['image/*']}
-                dropzoneText={"Drag and drop an image here or click"}
+                dropzoneText={"Drag and drop a new image here or click to upload"}
                 onDrop={(files) => { this.onDrop(files) }}
               />
 
@@ -203,62 +209,82 @@ class ProjectForm extends React.Component {
             </Grid>
 
             <Grid item xs={6}>
-              <TextField
-                variant="outlined"
-                fullWidth
-                style={{ margin: "10px", display: "block" }}
-                label="Project Name"
-                name="name"
-                value={name}
-                id="projectName"
-                required
-                onChange={this.onChange}
-              />
-
-              <TextField
-                variant="outlined"
-                fullWidth
-                style={{ margin: "10px", display: "block" }}
-                label="Project Description"
-                name="description"
-                value={description}
-                id="projectDescription"
-                multiline
-                required
-                onChange={this.onChange}
-              />
-
-              <TextField
-                variant="outlined"
-                fullWidth
-                style={{ margin: "10px", display: "block" }}
-                label="Project Repo URL"
-                name="repo_url"
-                value={repo_url}
-                id="projectRepo"
-                required
-                onChange={this.onChange}
-              />
-
-              <FormControl component="fieldset">
-                <FormLabel component="legend">Repo Status</FormLabel>
-                <FormGroup>
-                  <FormControlLabel
-                    control={<Checkbox checked={status === "private"} onChange={this.handleCheckboxChange} name="private" />}
-                    label="Private"
+              <Grid container direction="column" spacing={5} justify="space-between" alignItems="stretch">
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    fullWidth
+                    style={{ margin: "10px", display: "block" }}
+                    label="Project Name"
+                    name="name"
+                    value={name}
+                    id="projectName"
+                    required
+                    onChange={this.onChange}
                   />
+                </Grid>
 
-                  <FormControlLabel
-                    control={<Checkbox checked={status === "public"} onChange={this.handleCheckboxChange} name="public" />}
-                    label="Public"
+                <Grid item>
+                  <Editor
+                    apiKey="p29c5vz64uvqsuf3g2uzwnk0bmscnfmjwu88u9qgyjxnri6i"
+                    initialValue=""
+                    name="description"
+                    value={description}
+                    id="projectDescription"
+                    required
+                    init={{
+                      height: 500,
+                      menubar: false,
+                      plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                      ],
+                      toolbar:
+                        'undo redo | formatselect | bold italic backcolor | \
+                        alignleft aligncenter alignright alignjustify | \
+                        bullist numlist outdent indent | removeformat | help'
+                    }}
+                    onEditorChange={this.handleEditorChange}
                   />
-                </FormGroup>
-              </FormControl>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    fullWidth
+                    style={{ margin: "10px", display: "block" }}
+                    label="Project Repo URL"
+                    name="repo_url"
+                    value={repo_url}
+                    id="projectRepo"
+                    required
+                    onChange={this.onChange}
+                  />
+                </Grid>
+
+                <Grid item>
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">Repo Status</FormLabel>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={<Checkbox checked={status === "private"} onChange={this.handleCheckboxChange} name="private" />}
+                        label="Private"
+                      />
+
+                      <FormControlLabel
+                        control={<Checkbox checked={status === "public"} onChange={this.handleCheckboxChange} name="public" />}
+                        label="Public"
+                      />
+                    </FormGroup>
+                  </FormControl>
+                </Grid>
+              </Grid>
             </Grid>
 
             <Grid item xs={6}>
               <Grid container spacing={3} justify="space-between">
-                {screenshotsToDisplay.length > 0 && _.sortBy(screenshotsToDisplay, ['filename']).map((screenshot, index) => (
+                {screenshotsToDisplay.length > 0 ? _.sortBy(screenshotsToDisplay, ['filename']).map((screenshot, index) => (
                   <ScreenshotItem 
                     screenshot={screenshot} 
                     key={index} 
@@ -267,7 +293,18 @@ class ProjectForm extends React.Component {
                     loading={loading}
                     selectedScreenshot={selectedScreenshot} 
                   />
-                ))}
+                )) 
+                : (
+                  <Alert severity="info">
+                    <Typography>
+                      Once an image is uploaded, it will appear here.
+
+                      <br />
+
+                      Uploaded images can be marked as featured etc. after they appear here.
+                    </Typography>
+                  </Alert>
+                )}
               </Grid>
             </Grid>
           </Grid>

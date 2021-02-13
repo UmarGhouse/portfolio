@@ -10,6 +10,7 @@
     "@rails/activestorage": "^6.1.1",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "4.3.0",
+    "@tinymce/tinymce-react": "^3.10.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "lodash": "^4.17.20",
     "material-ui-dropzone": "^3.5.0",

@@ -20,7 +20,7 @@ class NewProject extends React.Component {
   onSubmit = (event, formData) => {
     event.preventDefault()
     const url = "/api/v1/projects/create"
-    const { name, description, repo_url, status, screenshots, blob_ids } = formData
+    const { name, description, repo_url, status, blob_ids } = formData
 
     if (name.length == 0 | description.length == 0) return
 
@@ -29,7 +29,7 @@ class NewProject extends React.Component {
 
     const body = {
       name,
-      description: description.replace(/\n/g, "<br> <br>"),
+      description,
       repo_url,
       status,
       screenshots: formattedBlobIds
