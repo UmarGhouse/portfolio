@@ -53,10 +53,20 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def update
-    params = { name: project_params[:name], description: project_params[:description], repo_url: project_params[:repo_url], status: project_params[:status] }
+    params = {
+      name: project_params[:name],
+      description: project_params[:description],
+      repo_url: project_params[:repo_url],
+      status: project_params[:status]
+    }
+
+    skills = project_params[:skills].map { |skill| Skill.find(skill[:value]) }
+
     screenshots = project_params[:screenshots].map { |screenshot_param| screenshot_param[:signed_blob_id] }
 
     @project.update(params)
+
+    @project.skills = skills
 
     if @project.screenshots.attach(screenshots)
       render json: @project
@@ -67,13 +77,18 @@ class Api::V1::ProjectsController < ApplicationController
 
   def show
     screenshots = []
+    skills = []
     
     @project.screenshots.order('featured DESC').map do |screenshot| 
       screenshots.push({ id: screenshot.id, url: screenshot.service_url, filename: screenshot.filename.to_s, featured: screenshot.featured })
     end
 
+    @project.skills.map do |skill|
+      skills.push({ id: skill.id, name: skill.name, startDate: skill.start_date })
+    end
+
     if @project
-      render json: @project.as_json.merge({ screenshots: screenshots })
+      render json: @project.as_json.merge({ screenshots: screenshots, skills: skills })
     else
       render json: @project.errors
     end
@@ -127,10 +142,10 @@ class Api::V1::ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:name, :description, :repo_url, :status, screenshots: [:signed_blob_id, :filename])
+    params.require(:project).permit(:name, :description, :repo_url, :status, skills: [:name, :value], screenshots: [:signed_blob_id, :filename])
   end
 
   def set_project
-    @project = Project.with_attached_screenshots.find(params[:id])
+    @project = Project.with_attached_screenshots.includes(:skills).find(params[:id])
   end
 end

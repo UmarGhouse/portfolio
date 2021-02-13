@@ -20,7 +20,7 @@ class NewProject extends React.Component {
   onSubmit = (event, formData) => {
     event.preventDefault()
     const url = "/api/v1/projects/create"
-    const { name, description, repo_url, status, blob_ids } = formData
+    const { name, description, repo_url, status, blob_ids, skills } = formData
 
     if (name.length == 0 | description.length == 0) return
 
@@ -32,7 +32,8 @@ class NewProject extends React.Component {
       description,
       repo_url,
       status,
-      screenshots: formattedBlobIds
+      screenshots: formattedBlobIds,
+      skills
     }
 
     const token = document.querySelector('meta[name="csrf-token"]').content

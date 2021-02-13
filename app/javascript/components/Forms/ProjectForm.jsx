@@ -3,6 +3,7 @@ import _ from 'lodash'
 
 import { Editor } from '@tinymce/tinymce-react'
 import { Button, TextField, Paper, FormGroup, FormControl, Checkbox, FormLabel, FormControlLabel, Grid, LinearProgress, Typography } from '@material-ui/core'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 import Alert from '@material-ui/lab/Alert'
 
 import { DropzoneArea } from 'material-ui-dropzone'
@@ -29,8 +30,14 @@ class ProjectForm extends React.Component {
       openDialog: false,
       selectedScreenshot: null,
       deleting: false,
-      loading: false
+      loading: false,
+      allSkills: [], // Array of all available skills
+      skills: [] // Array of selected skills
     }
+  }
+
+  componentDidMount() {
+    this.getSkills()
   }
 
   componentDidUpdate(prevProps) {
@@ -58,8 +65,32 @@ class ProjectForm extends React.Component {
     }
   }
 
+  getSkills = () => {
+    const url = `/api/v1/skills/index`
+
+    fetch(url)
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+
+        throw new Error("Network reponse was not OK")
+      })
+      .then(response => { 
+        const skillsList = []
+        response.map(skill => skillsList.push({ name: skill.name, value: skill.id }))
+
+        this.setState({ allSkills: skillsList })
+      })
+      .catch((error) => console.log(error))
+  }
+
   onChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
+  }
+
+  handleSkillsChange = (selectedItems) => {
+    this.setState({ skills: selectedItems })
   }
 
   handleEditorChange = (content, editor) => {
@@ -192,7 +223,22 @@ class ProjectForm extends React.Component {
 
   render() {
     const { handleSubmit, submitButtonText } = this.props
-    const { name, description, repo_url, status, screenshotsToDisplay, openSnackbar, snackbarMessage, uploading, openDialog, deleting, selectedScreenshot, loading } = this.state
+    const { 
+      name,
+      description,
+      repo_url,
+      status,
+      screenshotsToDisplay,
+      openSnackbar,
+      snackbarMessage,
+      uploading,
+      openDialog,
+      deleting,
+      selectedScreenshot,
+      loading,
+      allSkills,
+      skills
+    } = this.state
 
     return (
       <Paper style={{ backgroundColor: "#fcfcfc", padding: "2em", margin: '1em auto' }} elevation={3}>
@@ -260,6 +306,19 @@ class ProjectForm extends React.Component {
                     id="projectRepo"
                     required
                     onChange={this.onChange}
+                  />
+                </Grid>
+
+                <Grid item>
+                  <Autocomplete
+                    id="skills-select"
+                    fullWidth
+                    options={allSkills}
+                    getOptionLabel={(option) => option.name}
+                    multiple
+                    value={skills}
+                    onChange={(e, selectedItems) => { this.handleSkillsChange(selectedItems) }}
+                    renderInput={(params) => <TextField {...params} label="Skills" variant="outlined" />}
                   />
                 </Grid>
 
