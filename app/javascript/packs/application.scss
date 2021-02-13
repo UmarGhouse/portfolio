@@ -8,6 +8,8 @@ body {
   background-color: $baseColor;
   color: $accentWhite;
   min-width: 100%;
+  background-image: url('/assets/dot-grid.png');
+  background-repeat: repeat;
 
   a {
     color: $accentRed !important;
