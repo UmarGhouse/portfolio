@@ -33,8 +33,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   navLink: {
-    padding: '5px',
-    margin: '10px'
+    padding: '10px 20px',
+    margin: '10px',
+    borderRadius: '5px',
+    '&:hover': {
+      backgroundColor: '#ececec'
+    }
   }
 }))
 
@@ -68,7 +72,7 @@ export default function NavBar(props) {
 
               <div className={classes.navLinksContainer}>
                 <Link component={RouterLink} to='/projects' className={classes.navLink}>
-                  <Typography>Projects</Typography>
+                  <Typography className={classes.navLinkText}>Projects</Typography>
                 </Link>
 
                 <Link href='https://www.umarghouse.com/' className={classes.navLink}>
