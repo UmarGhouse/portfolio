@@ -6,6 +6,17 @@
   }
 }
 
+.project-grid-item .project-card {
+  transition: 0.25s ease-out;
+  max-height: 430px;
+  min-height: 430px;
+
+  &:hover {
+    transform: translateY(-10px);
+    transition: 0.25s ease-in;
+  }
+}
+
 .text-field {
   margin: 10px;
 }

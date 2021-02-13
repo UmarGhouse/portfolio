@@ -1,14 +1,14 @@
 import React, { Component } from "react";
+import { Link as RouterLink } from 'react-router-dom'
 import _ from 'lodash'
 
-import { Container, Grid, Tooltip, Card, CardContent, CardActions, CardMedia, Typography } from '@material-ui/core'
+import { Container, Grid, Tooltip, Card, CardContent, CardActions, CardMedia, Typography, Link } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
 
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 
-import { LinkButton } from '../Blocks'
+import { LinkButton, Footer } from '../Blocks'
 
 class Projects extends Component {
 	constructor(props) {
@@ -37,48 +37,38 @@ class Projects extends Component {
 		const { projects } = this.state
 
 		const allProjects = projects.map((project, index) => (
-			<Grid item xs={11} md={3} key={index} className="project-grid-item">
-				<Card>
-					<CardMedia
-						image={project.featured_screenshot ? project.featured_screenshot.url : 'https://via.placeholder.com/150'}
-						title={project.featured_screenshot ? project.featured_screenshot.filename : 'No image yet. Upload something!'}
-						style={{ height: '150px' }}
-					/>
-					<CardContent>
-						<h2>
-							{project.name}
-						</h2>
-						{project.status === "private" ? (
-							<Tooltip title="Private repo">
-								<VisibilityOffIcon />
-							</Tooltip>
-						) : (
-								<Tooltip title="Public repo">
-									<VisibilityIcon />
+			<Grid item xs={12} md={4} key={index} className="project-grid-item">
+				<Link component={RouterLink} to={`/project/${project.id}`}>
+					<Card className="project-card">
+						<CardMedia
+							image={project.featured_screenshot ? project.featured_screenshot.url : 'https://via.placeholder.com/150'}
+							title={project.featured_screenshot ? project.featured_screenshot.filename : 'No image yet. Upload something!'}
+							style={{ height: '150px' }}
+						/>
+						<CardContent>
+							<h2>
+								{project.name}
+							</h2>
+							{project.status === "private" ? (
+								<Tooltip title="Private repo">
+									<VisibilityOffIcon />
 								</Tooltip>
-							)}
+							) : (
+									<Tooltip title="Public repo">
+										<VisibilityIcon />
+									</Tooltip>
+								)}
 
-						<Typography>{project.description}</Typography>
-					</CardContent>
-
-					<CardActions>
-						<LinkButton size="small" variant='text' href={`/project/${project.id}`}>
-							View Project
-						</LinkButton>
-
-						{project.status === "public" ? (
-							<LinkButton size="small" variant='text' href={project.repo_url}>
-								View Website
-							</LinkButton>
-							) : null}
-					</CardActions>
-				</Card>
+							<Typography>{_.replace(project.description.substring(0, 150), /\\n/g, " ") + "..."}</Typography>
+						</CardContent>
+					</Card>
+				</Link>
 			</Grid>
 		))
 
 		const noProject = _.times(8, (i) => (
-			<Grid item xs={11} md={3} key={i} className="project-grid-item">
-				<Skeleton variant="rect" width={300} height={300} />
+			<Grid item xs={12} md={4} key={i} className="project-grid-item">
+				<Skeleton variant="rect" width={400} height={430} />
 			</Grid>
 		))
 
@@ -88,9 +78,15 @@ class Projects extends Component {
 					Create new Project
 				</LinkButton>
 
-				<Grid container spacing={2} direction="row" justify="space-evenly" alignItems="flex-start">
-					{projects.length > 0 ? allProjects : noProject}
-				</Grid>
+				<section className="section">
+					<Grid container spacing={2} direction="row" justify="space-evenly" alignItems="flex-start">
+						{projects.length > 0 ? allProjects : noProject}
+					</Grid>
+				</section>
+
+				<section className="section">
+					<Footer />
+				</section>
 			</Container>
 		)
 	}
