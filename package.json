@@ -18,6 +18,7 @@
     "react-dom": "^17.0.1",
     "react-image-gallery": "^1.0.8",
     "react-router-dom": "^5.2.0",
+    "sanitize-html": "= 2.0.0-rc.2",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",

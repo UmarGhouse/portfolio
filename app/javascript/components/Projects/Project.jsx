@@ -8,7 +8,8 @@ import StarIcon from '@material-ui/icons/Star'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 
-import { LinkButton } from '../Blocks'
+import { LinkButton, Footer } from '../Blocks'
+import { SanitizeHTML } from '../Utilities'
 
 class Project extends React.Component {
   constructor(props) {
@@ -110,7 +111,9 @@ class Project extends React.Component {
         <Grid container justify="space-between" alignItems="flex-start" spacing={5}>
           <Grid item xs={12} md={6}>
             <Typography>
-              {project ? project.description : "Loading..."}
+              {project ? (
+                <SanitizeHTML html={project.description} />
+              ) : "Loading..."}
             </Typography>
           </Grid>
 
@@ -130,6 +133,10 @@ class Project extends React.Component {
         <br />
 
         <LinkButton variant="outlined" className="btn-secondary" href="/projects">Back to all projects</LinkButton>
+
+        <section className="section">
+          <Footer />
+        </section>
       </Container>
     )
   }
