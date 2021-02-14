@@ -9,9 +9,10 @@ import Alert from '@material-ui/lab/Alert'
 import { DropzoneArea } from 'material-ui-dropzone'
 import { DirectUpload } from '@rails/activestorage'
 
+import SkillForm from './SkillForm'
 import ScreenshotItem from './ScreenshotItem'
 
-import { CustomSnackbar, ConfirmationDialog } from '../Blocks'
+import { CustomSnackbar, ConfirmationDialog, FormDialog } from '../Blocks'
 
 class ProjectForm extends React.Component {
   constructor(props) {
@@ -32,7 +33,8 @@ class ProjectForm extends React.Component {
       deleting: false,
       loading: false,
       allSkills: [], // Array of all available skills
-      skills: [] // Array of selected skills
+      skills: [], // Array of selected skills
+      openSkillDialog: false, // Boolean to open the skill form dialog
     }
   }
 
@@ -65,6 +67,7 @@ class ProjectForm extends React.Component {
     }
   }
 
+  // * TODO - Colour picker for skill chip colour.
   getSkills = () => {
     const url = `/api/v1/skills/index`
 
@@ -113,6 +116,14 @@ class ProjectForm extends React.Component {
     this.setState({ openDialog: false, selectedScreenshot: null })
   }
 
+  handleSkillDialogOpen = () => {
+    this.setState({ openSkillDialog: true })
+  }
+
+  handleSkillDialogClose = () => {
+    this.setState({ openSkillDialog: false })
+  }
+
   onDrop = (files) => {
     files.forEach(file => this.uploadFile(file))
   }
@@ -120,6 +131,7 @@ class ProjectForm extends React.Component {
   uploadFile = (file) => {
     this.setState({ uploading: true })
 
+    // * TODO: Add a settings file with baseURL
     const url = "http://localhost:3000/rails/active_storage/direct_uploads"
 
     const upload = new DirectUpload(file, url)
@@ -221,6 +233,11 @@ class ProjectForm extends React.Component {
       .catch(error => console.error(error.message))
   }
 
+  handleSkillFormSubmit = () => {
+    this.getSkills()
+    this.handleSkillDialogClose()
+  }
+
   render() {
     const { handleSubmit, submitButtonText } = this.props
     const { 
@@ -237,7 +254,8 @@ class ProjectForm extends React.Component {
       selectedScreenshot,
       loading,
       allSkills,
-      skills
+      skills,
+      openSkillDialog
     } = this.state
 
     return (
@@ -310,6 +328,7 @@ class ProjectForm extends React.Component {
                 </Grid>
 
                 <Grid item>
+                  <Button onClick={this.handleSkillDialogOpen}>Add Skill</Button>
                   <Autocomplete
                     id="skills-select"
                     fullWidth
@@ -386,6 +405,15 @@ class ProjectForm extends React.Component {
           showProgress
           isSubmitting={deleting}
         />
+
+        <FormDialog
+          open={openSkillDialog}
+          handleClose={this.handleSkillDialogClose}
+          title='Add a new skill'
+          content="Fill out the details below to add a new skill"
+        >
+          <SkillForm handleSubmit={this.handleSkillFormSubmit} />
+        </FormDialog>
       </Paper>
     )
   }
