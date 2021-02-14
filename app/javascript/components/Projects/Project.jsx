@@ -109,7 +109,7 @@ class Project extends React.Component {
         </h1>
 
         {project && project.skills.map(skill => (
-          <Chip size="small" label={skill.name} key={skill.id} className="skill-chip" style={{ backgroundColor: '#b3b3b3' }} />
+          <Chip size="small" label={skill.name} key={skill.value /* skill.id */} className="skill-chip" style={{ backgroundColor: skill.colour }} />
         ))}
 
         <Grid container justify="space-between" alignItems="flex-start" spacing={5}>

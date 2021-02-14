@@ -2,7 +2,20 @@ import React from 'react'
 import _ from 'lodash'
 
 import { Editor } from '@tinymce/tinymce-react'
-import { Button, TextField, Paper, FormGroup, FormControl, Checkbox, FormLabel, FormControlLabel, Grid, LinearProgress, Typography } from '@material-ui/core'
+import { 
+  Button, 
+  TextField, 
+  Paper, 
+  FormGroup, 
+  FormControl, 
+  Checkbox, 
+  FormLabel, 
+  FormControlLabel, 
+  Grid, 
+  LinearProgress, 
+  Typography, 
+  Chip 
+} from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import Alert from '@material-ui/lab/Alert'
 
@@ -53,7 +66,8 @@ class ProjectForm extends React.Component {
           description: currentValues.description,
           repo_url: currentValues.repo_url,
           status: currentValues.status,
-          screenshotsToDisplay: currentValues.screenshots
+          screenshotsToDisplay: currentValues.screenshots,
+          skills: currentValues.skills
         })
       } else {
         this.setState({
@@ -62,12 +76,12 @@ class ProjectForm extends React.Component {
           repo_url: "",
           status: 0,
           screenshotsToDisplay: [],
+          skills: []
         })
       }
     }
   }
 
-  // * TODO - Colour picker for skill chip colour.
   getSkills = () => {
     const url = `/api/v1/skills/index`
 
@@ -81,7 +95,7 @@ class ProjectForm extends React.Component {
       })
       .then(response => { 
         const skillsList = []
-        response.map(skill => skillsList.push({ name: skill.name, value: skill.id }))
+        response.map(skill => skillsList.push({ name: skill.name, value: skill.id, colour: skill.colour, startDate: skill.start_date }))
 
         this.setState({ allSkills: skillsList })
       })
@@ -338,6 +352,15 @@ class ProjectForm extends React.Component {
                     value={skills}
                     onChange={(e, selectedItems) => { this.handleSkillsChange(selectedItems) }}
                     renderInput={(params) => <TextField {...params} label="Skills" variant="outlined" />}
+                    renderTags={(tagValue, getTagProps) =>
+                      tagValue.map((option, index) => (
+                        <Chip
+                          label={option.name}
+                          {...getTagProps({ index })}
+                          style={{ backgroundColor: option.colour }}
+                        />
+                      ))
+                    }
                   />
                 </Grid>
 

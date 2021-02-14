@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link as RouterLink } from 'react-router-dom'
 import _ from 'lodash'
 
-import { Container, Grid, Tooltip, Card, CardContent, CardActions, CardMedia, Typography, Link } from '@material-ui/core'
+import { Container, Grid, Tooltip, Card, CardContent, Chip, CardMedia, Typography, Link } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
 
 import VisibilityIcon from '@material-ui/icons/Visibility'
@@ -60,9 +60,13 @@ class Projects extends Component {
 									</Tooltip>
 								)}
 
-							<Typography>
+							<Typography component="div">
 								<SanitizeHTML html={_.replace(project.description.substring(0, 150), /\\n/g, " ") + "..."} />
 							</Typography>
+
+							{project.skills && project.skills.map(skill => (
+								<Chip size="small" label={skill.name} key={skill.id} className="skill-chip" style={{ backgroundColor: skill.colour }} />
+							))}
 						</CardContent>
 					</Card>
 				</Link>

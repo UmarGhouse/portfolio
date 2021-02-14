@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import { SketchPicker } from 'react-color'
 
 import { Button, Grid, TextField } from '@material-ui/core'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
@@ -9,19 +9,21 @@ import MomentUtils from '@date-io/moment'
 const SkillForm = ({ handleSubmit }) => {
   const [state, setState] = React.useState({
     name: '',
-    startDate: new Date()
+    startDate: new Date(),
+    colour: '#ececec'
   })
 
   const submitForm = (event, formData) => {
     event.preventDefault()
     const url = "/api/v1/skills/create"
-    const { name, startDate } = formData
+    const { name, startDate, colour } = formData
 
     if (name.length == 0) return
 
     const body = {
       name,
-      start_date: startDate
+      start_date: startDate,
+      colour
     }
 
     const token = document.querySelector('meta[name="csrf-token"]').content
@@ -74,6 +76,13 @@ const SkillForm = ({ handleSubmit }) => {
               format="DD-MM-YYYY"
             />
           </MuiPickersUtilsProvider>
+        </Grid>
+
+        <Grid item xs={12}>
+          <SketchPicker
+            color={state.colour}
+            onChangeComplete={colour => { setState({ ...state, colour: colour.hex}) }}
+          />
         </Grid>
       </Grid>
 

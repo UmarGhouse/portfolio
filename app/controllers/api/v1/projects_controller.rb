@@ -2,7 +2,7 @@ class Api::V1::ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :update, :destroy, :get_screenshots, :make_screenshot_featured]
 
   def index
-    projects = Project.with_attached_screenshots.all.order(created_at: :desc)
+    projects = Project.with_attached_screenshots.includes(:skills).all.order(created_at: :desc)
 
     projects_with_screenshots = []
 
@@ -10,7 +10,16 @@ class Api::V1::ProjectsController < ApplicationController
       featured_screenshot = project.screenshots.find_by(featured: true)
 
       if featured_screenshot
-        projects_with_screenshots.push({ featured_screenshot: { filename: featured_screenshot.filename.to_s, url: featured_screenshot.service_url }, **project.as_json })
+        projects_with_screenshots.push({ 
+        featured_screenshot: { 
+          filename: featured_screenshot.filename.to_s, 
+          url: featured_screenshot.service_url 
+        },
+        skills: [
+          *project.skills
+        ],
+        **project.as_json 
+      })
       else
         projects_with_screenshots.push({ featured_screenshot: nil, **project.as_json })
       end  
@@ -84,7 +93,7 @@ class Api::V1::ProjectsController < ApplicationController
     end
 
     @project.skills.map do |skill|
-      skills.push({ id: skill.id, name: skill.name, startDate: skill.start_date })
+      skills.push({ value: skill.id, name: skill.name, startDate: skill.start_date, colour: skill.colour })
     end
 
     if @project
@@ -142,7 +151,7 @@ class Api::V1::ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:name, :description, :repo_url, :status, skills: [:name, :value], screenshots: [:signed_blob_id, :filename])
+    params.require(:project).permit(:name, :description, :repo_url, :status, skills: [:name, :value, :colour, :startDate], screenshots: [:signed_blob_id, :filename])
   end
 
   def set_project
