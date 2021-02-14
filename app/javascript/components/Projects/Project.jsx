@@ -1,17 +1,18 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 import ImageGallery from 'react-image-gallery'
 import { Container, Typography, Button, Tooltip, Grid, Chip } from '@material-ui/core'
-import StarIcon from '@material-ui/icons/Star'
 
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 
 import { LinkButton, Footer } from '../Blocks'
 import { SanitizeHTML } from '../Utilities'
+import UserContext from '../Contexts/UserContext'
 
 class Project extends React.Component {
+	static contextType = UserContext
+
   constructor(props) {
     super(props)
     this.state = {
@@ -89,6 +90,7 @@ class Project extends React.Component {
 
   render() {
     const { project, images } = this.state
+    const { userDetails } = this.context
 
     const showRepoButton = (
       <>
@@ -104,39 +106,47 @@ class Project extends React.Component {
 
     return (
       <Container>
-        <h1>
-          {project ? project.name : "Loading..."} {showRepoButton}
-        </h1>
+        <section className="section">
+          <Typography variant="h2">
+            {project ? project.name : "Loading..."} {showRepoButton}
+          </Typography>
+        </section>
 
         {project && project.skills.map(skill => (
           <Chip size="small" label={skill.name} key={skill.value /* skill.id */} className="skill-chip" style={{ backgroundColor: skill.colour }} />
         ))}
 
-        <Grid container justify="space-between" alignItems="flex-start" spacing={5} className="project-page-grid">
-          <Grid item xs={12} md={6}>
-            <Typography component="div">
-              {project ? (
-                <SanitizeHTML html={project.description} />
-              ) : "Loading..."}
-            </Typography>
+        <section className="section">
+          <Grid container justify="space-between" alignItems="flex-start" spacing={5} className="project-page-grid">
+            <Grid item xs={12} md={6}>
+              <Typography component="div">
+                {project ? (
+                  <SanitizeHTML html={project.description} />
+                ) : "Loading..."}
+              </Typography>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              {images && (
+                <ImageGallery items={images} thumbnailPosition="right" showPlayButton={false} showNav={false} height={750} />
+              )}
+            </Grid>
           </Grid>
+        </section>
 
-          <Grid item xs={12} md={6}>
-            {images && (
-              <ImageGallery items={images} thumbnailPosition="right" showPlayButton={false} showNav={false} height={750} />
-            )}
-          </Grid>
-        </Grid>
+        {userDetails && (
+          <section className="section">
+            {project && (<LinkButton variant="outlined" className="btn-primary" href={`/project/${project.id}/edit`}>Edit this project</LinkButton>)}
 
-        {project && (<LinkButton variant="outlined" className="btn-primary" href={`/project/${project.id}/edit`}>Edit this project</LinkButton>)}
+            <br />
 
-        <br />
+            <Button variant="outlined" className="btn-secondary" onClick={this.deleteProject}>Delete Project</Button>
+          </section>
+        )}
 
-        <Button variant="outlined" className="btn-secondary" onClick={this.deleteProject}>Delete Project</Button>
-
-        <br />
-
-        <LinkButton variant="outlined" className="btn-secondary" href="/projects">Back to all projects</LinkButton>
+        <section className="section">
+          <LinkButton variant="outlined" className="btn-secondary" href="/projects">Back to all projects</LinkButton>
+        </section>
 
         <section className="section">
           <Footer />
