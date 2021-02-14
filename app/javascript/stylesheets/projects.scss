@@ -1,5 +1,11 @@
 @import './variables.scss';
 
+.project-page-grid {
+  @media screen and (max-width: 600px) {
+    flex-direction: column-reverse;
+  }
+}
+
 .project-grid-item {
   p, h2 {
     color: $accentBlack;

@@ -112,7 +112,7 @@ class Project extends React.Component {
           <Chip size="small" label={skill.name} key={skill.value /* skill.id */} className="skill-chip" style={{ backgroundColor: skill.colour }} />
         ))}
 
-        <Grid container justify="space-between" alignItems="flex-start" spacing={5}>
+        <Grid container justify="space-between" alignItems="flex-start" spacing={5} className="project-page-grid">
           <Grid item xs={12} md={6}>
             <Typography component="div">
               {project ? (

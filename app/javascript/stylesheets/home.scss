@@ -2,10 +2,20 @@
 
 .home {
   margin-top: 5rem;
+  max-width: 100%;
+}
+
+.hero-section {
+  min-height: 100vh;
+
+  @media screen and (max-width: 600px) {
+    min-height: auto;
+  }
 }
 
 .background-text {
   z-index: -2;
+  max-width: 100%;
   position: absolute;
   margin: 10px;
   left: -3vw;
@@ -89,4 +99,8 @@
 .project-section-text {
   font-family: $subHeaderType !important;
   margin-bottom: 10px !important;
+}
+
+.homepage-project-image {
+  max-width: 100%;
 }

@@ -43,7 +43,7 @@ export default () => {
 
 	return (
 		<Container className='home'>
-			<section style={{ minHeight: "100vh" }} className="section">
+			<section className="section hero-section">
 				<Grid container direction="row" spacing={4} justify="space-between" alignItems="center" className="hero-container">
 					<Grid item xs={12} md={8}>
 						<h1 className='hero-header'>
@@ -90,20 +90,18 @@ export default () => {
 			</section>
 
 			<section className="section">
-				<Grid container direction="column" justify="space-between" alignItems="stretch" spacing={5} style={{ height: "100%" }}>
+				<Grid container direction="column" justify="space-between" alignItems="stretch" spacing={5}>
 					<Grid item>
 						<Link component={RouterLink} to='/projects'>
 							<Grid container justify="flex-start" alignItems="center" spacing={3}>
 								<Grid item>
 									<Typography variant="h2">
 										Latest projects
-									</Typography>
-								</Grid>
 
-								<Grid item style={{ marginTop: '1em' }}>
-									<Icon>
-										<ArrowForwardIosIcon />
-									</Icon>
+										<Icon>
+											<ArrowForwardIosIcon style={{ marginBottom: '0.2em' }} />
+										</Icon>
+									</Typography>
 								</Grid>
 							</Grid>
 						</Link>
@@ -126,7 +124,7 @@ export default () => {
 								</Grid>
 
 								<Grid item xs={12} md={6}>
-									<img src={project.featured_screenshot ? project.featured_screenshot.url : "https://via.placeholder.com/350"} />
+									<img className="homepage-project-image" src={project.featured_screenshot ? project.featured_screenshot.url : "https://via.placeholder.com/350"} />
 								</Grid>
 							</Grid>
 						))}
