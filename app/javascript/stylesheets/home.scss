@@ -20,21 +20,25 @@
   margin: 10px;
   left: -3vw;
   top: 10vh;
-  font-size: 35vh;
+  font-size: 15rem;
   font-weight: 700;
   font-family: $headerType;
   word-wrap: break-word;
   opacity: 0.5;
   color: darken($color: $baseColor, $amount: 7);
 
+  @media screen and (max-width: 1200px) {
+    font-size: 10rem;
+  }
+
   @media screen and (max-width: 600px) {
-    font-size: 5rem;
+    font-size: 4.5rem;
     top: 15vh;
   }
 }
 
 .hero-container {
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 1200px) {
     flex-direction: column-reverse;
   }
 }
@@ -67,7 +71,7 @@
   width: 25vw;
   border-radius: 1rem;
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 1200px) {
     width: 100%;
   }
 }

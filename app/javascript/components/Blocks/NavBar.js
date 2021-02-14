@@ -1,7 +1,19 @@
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
-import { AppBar, Toolbar, Typography, Button, makeStyles, Container, useScrollTrigger, Link } from '@material-ui/core'
+import { 
+  AppBar, 
+  Toolbar, 
+  Typography, 
+  IconButton, 
+  makeStyles, 
+  Container, 
+  useScrollTrigger, 
+  Link, 
+  Hidden, 
+  Drawer 
+} from '@material-ui/core'
+import MenuIcon from '@material-ui/icons/Menu'
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -16,8 +28,12 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     padding: theme.spacing(0, 5),
+    [theme.breakpoints.down("md")]: {
+      padding: theme.spacing(0,1)
+    },
   },
   toolbarMixin: {
     // necessary for content to be below app bar
@@ -25,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
   },
   navLinksContainer: {
     marginRight: theme.spacing(2),
-    width: "100%",
     marginLeft: "auto",
     [theme.breakpoints.up("sm")]: {
       display: "inherit",
@@ -44,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NavBar(props) {
   const classes = useStyles()
+  const [drawerOpen, setDrawerOpen] = React.useState(false)
 
   function ElevationScroll(props) {
     const { children } = props
@@ -56,6 +72,30 @@ export default function NavBar(props) {
       elevation: trigger ? 4 : 0,
       className: trigger ? classes.appBarSolid : classes.appbar
     })
+  }
+
+  const NavLinks = () => {
+    return (
+      <>
+        <Hidden implementation="js" mdUp>
+          <Link component={RouterLink} to='/' className={classes.navLink} onClick={() => { setDrawerOpen(false) }}>
+            <Typography className={classes.navLinkText}>Home</Typography>
+          </Link>
+        </Hidden>
+
+        <Link component={RouterLink} to='/projects' className={classes.navLink} onClick={() => { setDrawerOpen(false) }}>
+          <Typography className={classes.navLinkText}>Projects</Typography>
+        </Link>
+
+        <Link href='https://www.umarghouse.com/' target="_blank" className={classes.navLink} onClick={() => { setDrawerOpen(false) }}>
+          <Typography>Blog</Typography>
+        </Link>
+
+        <Link component={RouterLink} to='/about' className={classes.navLink} onClick={() => { setDrawerOpen(false) }}>
+          <Typography>About</Typography>
+        </Link>
+      </>
+    )
   }
 
   return (
@@ -71,17 +111,19 @@ export default function NavBar(props) {
               </Link>
 
               <div className={classes.navLinksContainer}>
-                <Link component={RouterLink} to='/projects' className={classes.navLink}>
-                  <Typography className={classes.navLinkText}>Projects</Typography>
-                </Link>
+                <Hidden implementation="js" mdUp>
+                  <IconButton className={classes.menuIcon} onClick={() => { setDrawerOpen(true) }}>
+                    <MenuIcon />
+                  </IconButton>
 
-                <Link href='https://www.umarghouse.com/' target="_blank" className={classes.navLink}>
-                  <Typography>Blog</Typography>
-                </Link>
+                  <Drawer anchor="right" open={drawerOpen} onClose={() => { setDrawerOpen(false) }}>
+                    <NavLinks />
+                  </Drawer>
+                </Hidden>
 
-                <Link component={RouterLink} to='/about' className={classes.navLink}>
-                  <Typography>About</Typography>
-                </Link>
+                <Hidden implementation="js" mdDown>
+                  <NavLinks />
+                </Hidden>
               </div>
             </Toolbar>
           </Container>

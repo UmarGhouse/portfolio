@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Link as RouterLink } from 'react-router-dom'
 
-import { Container, Grid, Icon, Typography, Link } from '@material-ui/core'
+import { Container, Grid, Icon, Typography, Link, Hidden, Divider } from '@material-ui/core'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 
 import { LinkButton, Footer } from '../Blocks'
@@ -45,7 +45,7 @@ export default () => {
 		<Container className='home'>
 			<section className="section hero-section">
 				<Grid container direction="row" spacing={4} justify="space-between" alignItems="center" className="hero-container">
-					<Grid item xs={12} md={8}>
+					<Grid item xs={12} lg={8}>
 						<h1 className='hero-header'>
 							Umar Ghouse
 						</h1>
@@ -58,7 +58,7 @@ export default () => {
 							Maecenas elementum elit rutrum odio scelerisque consectetur. Mauris at urna accumsan, dapibus nibh eu, tristique lorem. Donec in tellus sit amet sapien vulputate luctus facilisis nec mi.
 						</p>
 					</Grid>
-					<Grid item xs={12} md={4}>
+					<Grid item xs={12} lg={4}>
 						<img src={heroImage} className='hero-image' />
 					</Grid>
 				</Grid>
@@ -88,6 +88,10 @@ export default () => {
 					</Grid>
 				</div>
 			</section>
+
+			<Hidden implementation="js" mdUp>
+				<Divider />
+			</Hidden>
 
 			<section className="section">
 				<Grid container direction="column" justify="space-between" alignItems="stretch" spacing={5}>
