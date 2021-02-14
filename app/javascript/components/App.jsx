@@ -16,9 +16,9 @@ firebase.initializeApp(settings.firebaseConfig)
 function onAuthStateChange(callback) {
   return firebase.auth().onAuthStateChanged(user => {
     if (user) {
-      callback({ loggedIn: true, user })
+      callback(user)
     } else {
-      callback({ loggedIn: false, user: null })
+      callback(null)
     }
   });
 }
@@ -32,7 +32,7 @@ function logout() {
 }
 
 export default props => {
-  const [user, setUser] = useState({ loggedIn: false })
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChange(setUser)
@@ -53,7 +53,7 @@ export default props => {
   return (
     <Router>
       <ScrollToTop />
-      <UserContext.Provider value={{ user, logout: requestLogout, login: requestLogin}}>
+      <UserContext.Provider value={{ userDetails: user, logout: requestLogout, login: requestLogin}}>
         <NavBar {...props} />
 
         {Routes}

@@ -16,7 +16,8 @@ const styles = theme => ({
   loginFormContainer: {
     background: '#ffffff',
     boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.1)',
-    borderRadius: '20px'
+    borderRadius: '20px',
+    padding: '30px 10px'
   },
   companyLogo: {
     width: '50%'

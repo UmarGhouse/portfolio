@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '10px 20px',
     margin: '10px',
     borderRadius: '5px',
+    cursor: 'pointer',
     '&:hover': {
       backgroundColor: '#ececec'
     }
@@ -100,7 +101,7 @@ export default function NavBar(props) {
           <Typography>About</Typography>
         </Link>
 
-        {user.user.loggedIn ? (
+        {user.userDetails ? (
           <Link 
             className={classes.navLink} 
             onClick={(event) => {

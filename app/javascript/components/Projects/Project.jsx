@@ -90,7 +90,7 @@ class Project extends React.Component {
 
   render() {
     const { project, images } = this.state
-    const { user } = this.context
+    const { userDetails } = this.context
 
     const showRepoButton = (
       <>
@@ -134,7 +134,7 @@ class Project extends React.Component {
           </Grid>
         </section>
 
-        {user.loggedIn && (
+        {userDetails && (
           <section className="section">
             {project && (<LinkButton variant="outlined" className="btn-primary" href={`/project/${project.id}/edit`}>Edit this project</LinkButton>)}
 
