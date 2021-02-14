@@ -116,7 +116,7 @@ export default () => {
 										{project.name}
 									</Typography>
 
-									<Typography variant="h5" className="project-section-text">
+									<Typography variant="h5" className="project-section-text" component='div'>
 										<SanitizeHTML html={_.replace(project.description.substring(0, 200), /\\n/g, " ") + "..."} />
 									</Typography>
 

@@ -6,7 +6,7 @@
 
 body {
   background-color: $baseColor;
-  color: $accentWhite;
+  color: $accentBlack;
   min-width: 100%;
   background-image: url('/assets/dot-grid.png');
   background-repeat: repeat;
@@ -24,6 +24,14 @@ body {
   }
 }
 
+.btn-container {
+  display: inline;
+}
+
+.btn-container .btn-primary, .btn-container .btn-secondary {
+  transition: 0.25s ease-out;
+}
+
 .btn-secondary {
   border-color: $accentRed !important;
   color: $accentRed !important;
@@ -31,18 +39,24 @@ body {
 
 .btn-secondary:hover {
   background-color: $accentRed !important;
-  color: $accentWhite !important;
+  color: $baseColor !important;
+  box-shadow: #b3b3b3 0px 7px 29px 0px;
+  transform: translateY(-7px);
+  transition: 0.25s ease-in;
 }
 
 .btn-primary {
-  background-color: $secondaryColor !important;
-  color: $accentWhite !important;
+  background-color: $accentRed !important;
+  color: $baseColor !important;
 }
 
 .btn-primary:hover {
-  border-color: $accentWhite !important;
-  background-color: $accentWhite !important;
-  color: $secondaryColor !important;
+  border-color: $baseColor !important;
+  background-color: $baseColor !important;
+  color: $accentRed !important;
+  box-shadow: #b3b3b3 0px 7px 29px 0px;
+  transform: translateY(-7px);
+  transition: 0.25s ease-in;
 }
 
 .footer-link {
