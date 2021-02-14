@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
+
+import UserContext from '../Contexts/UserContext'
 
 import { 
   AppBar, 
@@ -11,7 +13,8 @@ import {
   useScrollTrigger, 
   Link, 
   Hidden, 
-  Drawer 
+  Drawer ,
+  Button
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 
@@ -75,6 +78,8 @@ export default function NavBar(props) {
   }
 
   const NavLinks = () => {
+    const user = useContext(UserContext)
+
     return (
       <>
         <Hidden implementation="js" mdUp>
@@ -94,6 +99,23 @@ export default function NavBar(props) {
         <Link component={RouterLink} to='/about' className={classes.navLink} onClick={() => { setDrawerOpen(false) }}>
           <Typography>About</Typography>
         </Link>
+
+        {user.user.loggedIn ? (
+          <Link 
+            className={classes.navLink} 
+            onClick={(event) => {
+              event.preventDefault()
+
+              user.logout()
+            }}
+          >
+            <Typography>Logout</Typography>
+          </Link>
+        ) : (
+          <Link component={RouterLink} to='/login' className={classes.navLink} onClick={() => { setDrawerOpen(false) }}>
+            <Typography>Login</Typography>
+          </Link>
+        )}
       </>
     )
   }

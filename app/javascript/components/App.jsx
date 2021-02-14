@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useCallback, useContext } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Routes from "../routes/Index";
 import { BrowserRouter as Router } from "react-router-dom";
 import { NavBar } from "./Blocks";
 import { ScrollToTop } from '../components/Utilities'
+import UserContext from './Contexts/UserContext'
 
 import firebase from 'firebase/app'
 import 'firebase/analytics'
 import 'firebase/auth'
-
-import Login from "../components/StaticPages/Login";
 
 import settings from '../settings/settings'
 
@@ -17,9 +16,9 @@ firebase.initializeApp(settings.firebaseConfig)
 function onAuthStateChange(callback) {
   return firebase.auth().onAuthStateChanged(user => {
     if (user) {
-      callback({ loggedIn: true })
+      callback({ loggedIn: true, user })
     } else {
-      callback({ loggedIn: false })
+      callback({ loggedIn: false, user: null })
     }
   });
 }
@@ -46,6 +45,7 @@ export default props => {
   const requestLogin = useCallback((username, password) => {
     login(username, password);
   });
+
   const requestLogout = useCallback(() => {
     logout();
   }, []);
@@ -53,10 +53,12 @@ export default props => {
   return (
     <Router>
       <ScrollToTop />
-      <NavBar {...props} />
+      <UserContext.Provider value={{ user, logout: requestLogout, login: requestLogin}}>
+        <NavBar {...props} />
 
-      { !user.loggedIn && <Login onClick={requestLogin} /> }
-      {user.loggedIn && Routes}
+        {Routes}
+      </UserContext.Provider>
+
     </Router>
   )
 };
