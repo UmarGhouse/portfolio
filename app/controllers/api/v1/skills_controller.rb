@@ -34,7 +34,7 @@ class Api::V1::SkillsController < ApplicationController
   private
 
   def skill_params
-    params.require(:skill).permit(:name, :start_date)
+    params.require(:skill).permit(:name, :start_date, :colour)
   end
 
   def set_skill

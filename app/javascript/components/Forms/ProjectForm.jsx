@@ -2,15 +2,30 @@ import React from 'react'
 import _ from 'lodash'
 
 import { Editor } from '@tinymce/tinymce-react'
-import { Button, TextField, Paper, FormGroup, FormControl, Checkbox, FormLabel, FormControlLabel, Grid, LinearProgress, Typography } from '@material-ui/core'
+import { 
+  Button, 
+  TextField, 
+  Paper, 
+  FormGroup, 
+  FormControl, 
+  Checkbox, 
+  FormLabel, 
+  FormControlLabel, 
+  Grid, 
+  LinearProgress, 
+  Typography, 
+  Chip 
+} from '@material-ui/core'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 import Alert from '@material-ui/lab/Alert'
 
 import { DropzoneArea } from 'material-ui-dropzone'
 import { DirectUpload } from '@rails/activestorage'
 
+import SkillForm from './SkillForm'
 import ScreenshotItem from './ScreenshotItem'
 
-import { CustomSnackbar, ConfirmationDialog } from '../Blocks'
+import { CustomSnackbar, ConfirmationDialog, FormDialog } from '../Blocks'
 
 class ProjectForm extends React.Component {
   constructor(props) {
@@ -29,8 +44,15 @@ class ProjectForm extends React.Component {
       openDialog: false,
       selectedScreenshot: null,
       deleting: false,
-      loading: false
+      loading: false,
+      allSkills: [], // Array of all available skills
+      skills: [], // Array of selected skills
+      openSkillDialog: false, // Boolean to open the skill form dialog
     }
+  }
+
+  componentDidMount() {
+    this.getSkills()
   }
 
   componentDidUpdate(prevProps) {
@@ -44,7 +66,8 @@ class ProjectForm extends React.Component {
           description: currentValues.description,
           repo_url: currentValues.repo_url,
           status: currentValues.status,
-          screenshotsToDisplay: currentValues.screenshots
+          screenshotsToDisplay: currentValues.screenshots,
+          skills: currentValues.skills
         })
       } else {
         this.setState({
@@ -53,13 +76,38 @@ class ProjectForm extends React.Component {
           repo_url: "",
           status: 0,
           screenshotsToDisplay: [],
+          skills: []
         })
       }
     }
   }
 
+  getSkills = () => {
+    const url = `/api/v1/skills/index`
+
+    fetch(url)
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+
+        throw new Error("Network reponse was not OK")
+      })
+      .then(response => { 
+        const skillsList = []
+        response.map(skill => skillsList.push({ name: skill.name, value: skill.id, colour: skill.colour, startDate: skill.start_date }))
+
+        this.setState({ allSkills: skillsList })
+      })
+      .catch((error) => console.log(error))
+  }
+
   onChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
+  }
+
+  handleSkillsChange = (selectedItems) => {
+    this.setState({ skills: selectedItems })
   }
 
   handleEditorChange = (content, editor) => {
@@ -82,6 +130,14 @@ class ProjectForm extends React.Component {
     this.setState({ openDialog: false, selectedScreenshot: null })
   }
 
+  handleSkillDialogOpen = () => {
+    this.setState({ openSkillDialog: true })
+  }
+
+  handleSkillDialogClose = () => {
+    this.setState({ openSkillDialog: false })
+  }
+
   onDrop = (files) => {
     files.forEach(file => this.uploadFile(file))
   }
@@ -89,6 +145,7 @@ class ProjectForm extends React.Component {
   uploadFile = (file) => {
     this.setState({ uploading: true })
 
+    // * TODO: Add a settings file with baseURL
     const url = "http://localhost:3000/rails/active_storage/direct_uploads"
 
     const upload = new DirectUpload(file, url)
@@ -190,9 +247,30 @@ class ProjectForm extends React.Component {
       .catch(error => console.error(error.message))
   }
 
+  handleSkillFormSubmit = () => {
+    this.getSkills()
+    this.handleSkillDialogClose()
+  }
+
   render() {
     const { handleSubmit, submitButtonText } = this.props
-    const { name, description, repo_url, status, screenshotsToDisplay, openSnackbar, snackbarMessage, uploading, openDialog, deleting, selectedScreenshot, loading } = this.state
+    const { 
+      name,
+      description,
+      repo_url,
+      status,
+      screenshotsToDisplay,
+      openSnackbar,
+      snackbarMessage,
+      uploading,
+      openDialog,
+      deleting,
+      selectedScreenshot,
+      loading,
+      allSkills,
+      skills,
+      openSkillDialog
+    } = this.state
 
     return (
       <Paper style={{ backgroundColor: "#fcfcfc", padding: "2em", margin: '1em auto' }} elevation={3}>
@@ -264,6 +342,29 @@ class ProjectForm extends React.Component {
                 </Grid>
 
                 <Grid item>
+                  <Button onClick={this.handleSkillDialogOpen}>Add Skill</Button>
+                  <Autocomplete
+                    id="skills-select"
+                    fullWidth
+                    options={allSkills}
+                    getOptionLabel={(option) => option.name}
+                    multiple
+                    value={skills}
+                    onChange={(e, selectedItems) => { this.handleSkillsChange(selectedItems) }}
+                    renderInput={(params) => <TextField {...params} label="Skills" variant="outlined" />}
+                    renderTags={(tagValue, getTagProps) =>
+                      tagValue.map((option, index) => (
+                        <Chip
+                          label={option.name}
+                          {...getTagProps({ index })}
+                          style={{ backgroundColor: option.colour }}
+                        />
+                      ))
+                    }
+                  />
+                </Grid>
+
+                <Grid item>
                   <FormControl component="fieldset">
                     <FormLabel component="legend">Repo Status</FormLabel>
                     <FormGroup>
@@ -327,6 +428,15 @@ class ProjectForm extends React.Component {
           showProgress
           isSubmitting={deleting}
         />
+
+        <FormDialog
+          open={openSkillDialog}
+          handleClose={this.handleSkillDialogClose}
+          title='Add a new skill'
+          content="Fill out the details below to add a new skill"
+        >
+          <SkillForm handleSubmit={this.handleSkillFormSubmit} />
+        </FormDialog>
       </Paper>
     )
   }

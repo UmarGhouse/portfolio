@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import ImageGallery from 'react-image-gallery'
-import { Container, Typography, Button, Tooltip, Grid } from '@material-ui/core'
+import { Container, Typography, Button, Tooltip, Grid, Chip } from '@material-ui/core'
 import StarIcon from '@material-ui/icons/Star'
 
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
@@ -108,9 +108,13 @@ class Project extends React.Component {
           {project ? project.name : "Loading..."} {showRepoButton}
         </h1>
 
+        {project && project.skills.map(skill => (
+          <Chip size="small" label={skill.name} key={skill.value /* skill.id */} className="skill-chip" style={{ backgroundColor: skill.colour }} />
+        ))}
+
         <Grid container justify="space-between" alignItems="flex-start" spacing={5}>
           <Grid item xs={12} md={6}>
-            <Typography>
+            <Typography component="div">
               {project ? (
                 <SanitizeHTML html={project.description} />
               ) : "Loading..."}

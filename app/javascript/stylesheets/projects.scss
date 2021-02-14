@@ -9,7 +9,7 @@
 .project-grid-item .project-card {
   transition: 0.25s ease-out;
   max-height: 430px;
-  min-height: 430px;
+  min-height: 475px;
 
   &:hover {
     transform: translateY(-10px);
@@ -25,4 +25,8 @@
 .image-gallery-slide-wrapper {
   min-height: 400px;
   background-color: #333;
+}
+
+.skill-chip {
+  margin: 5px;
 }
