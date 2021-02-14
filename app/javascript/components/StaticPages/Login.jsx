@@ -57,7 +57,7 @@ class Login extends Component {
     const { login } = this.context
 
     login(email, password)
-    history.push('/')
+    history.goBack()
   }
 
   render() {

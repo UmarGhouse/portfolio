@@ -10,8 +10,11 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 
 import { LinkButton, Footer } from '../Blocks'
 import { SanitizeHTML } from '../Utilities'
+import UserContext from '../Contexts/UserContext'
 
 class Projects extends Component {
+	static contextType = UserContext
+
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -36,6 +39,7 @@ class Projects extends Component {
 
 	render() {
 		const { projects } = this.state
+    const { user } = this.context
 
 		const allProjects = projects.map((project, index) => (
 			<Grid item xs={12} md={4} key={index} className="project-grid-item">
@@ -81,9 +85,17 @@ class Projects extends Component {
 
 		return (
 			<Container>
-				<LinkButton className='btn-primary' variant='contained' href="/project">
-					Create new Project
-				</LinkButton>
+				<section className="section">
+					<Typography variant="h2">
+						Projects
+					</Typography>
+				</section>
+
+				{user.loggedIn && (
+					<LinkButton className='btn-primary' variant='contained' href="/project">
+						Create new Project
+					</LinkButton>
+				)}
 
 				<section className="section">
 					<Grid container spacing={2} direction="row" justify="space-evenly" alignItems="flex-start">
