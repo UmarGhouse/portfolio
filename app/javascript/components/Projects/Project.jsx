@@ -137,7 +137,7 @@ class Project extends React.Component {
 
             <Grid item xs={12} md={6}>
               {images && (
-                <ImageGallery items={images} thumbnailPosition="right" showPlayButton={false} showNav={false} height={750} />
+                <ImageGallery items={images} thumbnailPosition="bottom" showPlayButton={false} showNav={false} height={750} />
               )}
             </Grid>
           </Grid>

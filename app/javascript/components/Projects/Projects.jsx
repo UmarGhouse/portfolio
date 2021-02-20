@@ -79,7 +79,7 @@ class Projects extends Component {
 
 		const noProject = _.times(8, (i) => (
 			<Grid item xs={12} md={4} key={i} className="project-grid-item">
-				<Skeleton variant="rect" width={400} height={430} />
+				<Skeleton variant="rect" height={430} className="project-skeleton" />
 			</Grid>
 		))
 

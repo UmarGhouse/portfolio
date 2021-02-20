@@ -99,14 +99,18 @@ export default () => {
 					<Grid item>
 						<Link component={RouterLink} to='/projects'>
 							<Grid container justify="flex-start" alignItems="center" spacing={3}>
-								<Grid item>
-									<Typography variant="h2">
-										Latest projects
+								<Grid item className="latest-projects-container">
+									<div className="latest-projects-wrapper">
+										<Typography variant="h2">
+											Latest projects
 
-										<Icon>
-											<ArrowForwardIosIcon style={{ marginBottom: '0.2em' }} />
-										</Icon>
-									</Typography>
+											<span className="latest-projects-arrow">
+												<Icon>
+													<ArrowForwardIosIcon style={{ marginBottom: '0.2em' }} />
+												</Icon>
+											</span>
+										</Typography>
+									</div>
 								</Grid>
 							</Grid>
 						</Link>
@@ -128,7 +132,7 @@ export default () => {
 									</LinkButton>
 								</Grid>
 
-								<Grid item xs={12} md={6}>
+								<Grid item xs={12} md={6} className="homepage-project-image-container">
 									<img className="homepage-project-image" src={project.featured_screenshot ? project.featured_screenshot.url : "https://via.placeholder.com/350"} />
 								</Grid>
 							</Grid>
