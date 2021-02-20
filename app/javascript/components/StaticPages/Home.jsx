@@ -47,15 +47,16 @@ export default () => {
 				<Grid container direction="row" spacing={4} justify="space-between" alignItems="center" className="hero-container">
 					<Grid item xs={12} lg={8}>
 						<h1 className='hero-header'>
-							Umar Ghouse
+							<span role="img" className="wave-emoji">👋🏽</span> I'm Umar
 						</h1>
 
 						<p className='hero-body'>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget dui purus. Aliquam erat volutpat.
+							I'm a self-taught web developer from Colombo, Sri Lanka.
 						</p>
 
 						<p className='hero-body'>
-							Maecenas elementum elit rutrum odio scelerisque consectetur. Mauris at urna accumsan, dapibus nibh eu, tristique lorem. Donec in tellus sit amet sapien vulputate luctus facilisis nec mi.
+							I'm a (mostly) fullstack developer, with a focus on backend development. I work with Rails and React (among other technologies) 
+							to help build valuable tech products for everyone.
 						</p>
 					</Grid>
 					<Grid item xs={12} lg={4}>
