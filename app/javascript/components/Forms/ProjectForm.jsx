@@ -284,6 +284,7 @@ class ProjectForm extends React.Component {
               <DropzoneArea
                 acceptedFiles={['image/*']}
                 dropzoneText={"Drag and drop a new image here or click to upload"}
+                filesLimit={15}
                 onDrop={(files) => { this.onDrop(files) }}
               />
 
