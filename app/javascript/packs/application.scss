@@ -8,7 +8,7 @@ body {
   background-color: $baseColor;
   color: $accentBlack;
   min-width: 100%;
-  background-image: image-url('/assets/dot-grid.png');
+  background-image: url('/assets/dot-grid.png');
   background-repeat: repeat;
 
   a {
