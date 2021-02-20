@@ -40,10 +40,10 @@ export default function About() {
             </p>
 
             <p className="hero-body">
-              If you wanna know more about how I think check out my <Link href="https://www.umarghouse.com/" target="_blank">blog</Link>{' '}
+              If you wanna know more about how I think check out my <Link href="https://blog.umarghouse.com/" target="_blank">blog</Link>{' '}
               (I write about whatever I'm currently thinking or learning in code, but also other topics I'm interested in, like{' '}
-              <Link href="https://www.umarghouse.com/posts/3" target="_blank">Productivity</Link> and {' '}
-              <Link href="https://www.umarghouse.com/posts/2" target="_blank">Downtime</Link>).
+              <Link href="https://blog.umarghouse.com/posts/3" target="_blank">Productivity</Link> and {' '}
+              <Link href="https://blog.umarghouse.com/posts/2" target="_blank">Downtime</Link>).
             </p>
             
             <small>

@@ -93,7 +93,7 @@ export default function NavBar(props) {
           <Typography className={classes.navLinkText}>Projects</Typography>
         </Link>
 
-        <Link href='https://www.umarghouse.com/' target="_blank" className={classes.navLink} onClick={() => { setDrawerOpen(false) }}>
+        <Link href='https://blog.umarghouse.com/' target="_blank" className={classes.navLink} onClick={() => { setDrawerOpen(false) }}>
           <Typography>Blog</Typography>
         </Link>
 
