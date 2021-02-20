@@ -42,7 +42,7 @@ class EditProject extends React.Component {
 
     event.preventDefault()
     const url = `/api/v1/projects/update/${id}`
-    const { name, description, repo_url, status, blob_ids, skills } = formData
+    const { name, description, repo_url, status, blob_ids, skills, url: prodUrl } = formData
 
     if (name.length == 0 | description.length == 0) return
 
@@ -53,6 +53,7 @@ class EditProject extends React.Component {
       name,
       description,
       repo_url,
+      url: prodUrl,
       status,
       screenshots: formattedBlobIds,
       skills

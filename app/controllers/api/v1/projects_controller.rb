@@ -47,7 +47,14 @@ class Api::V1::ProjectsController < ApplicationController
   end
 
   def create
-    params = { name: project_params[:name], description: project_params[:description], repo_url: project_params[:repo_url], status: project_params[:status] }
+    params = { 
+      name: project_params[:name],
+      description: project_params[:description],
+      repo_url: project_params[:repo_url],
+      url: project_params[:url],
+      status: project_params[:status]
+    }
+
     screenshots = project_params[:screenshots].map { |screenshot_param| screenshot_param[:signed_blob_id] }
 
     project = Project.create!(params)
@@ -66,6 +73,7 @@ class Api::V1::ProjectsController < ApplicationController
       name: project_params[:name],
       description: project_params[:description],
       repo_url: project_params[:repo_url],
+      url: project_params[:url],
       status: project_params[:status]
     }
 
@@ -151,7 +159,7 @@ class Api::V1::ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:name, :description, :repo_url, :status, skills: [:name, :value, :colour, :startDate], screenshots: [:signed_blob_id, :filename])
+    params.require(:project).permit(:name, :description, :repo_url, :url, :status, skills: [:name, :value, :colour, :startDate], screenshots: [:signed_blob_id, :filename])
   end
 
   def set_project

@@ -5,6 +5,7 @@ import { Container, Typography, Button, Tooltip, Grid, Chip } from '@material-ui
 
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
+import GitHubIcon from '@material-ui/icons/GitHub'
 
 import { LinkButton, Footer } from '../Blocks'
 import { SanitizeHTML } from '../Utilities'
@@ -95,7 +96,7 @@ class Project extends React.Component {
     const showRepoButton = (
       <>
         {project && project.status === "public" ?
-          (<Tooltip title={project && project.repo_url}><a href={project ? project.repo_url : "#"} target="_blank"><OpenInNewIcon /></a></Tooltip>)
+          (<Tooltip title={project && project.repo_url}><a href={project ? project.repo_url : "#"} target="_blank"><GitHubIcon /></a></Tooltip>)
           : (
             <Tooltip title="Private repo">
               <VisibilityOffIcon />
@@ -104,11 +105,19 @@ class Project extends React.Component {
       </>
     )
 
+    const showUrlButton = (
+      <>
+        {project && project.url &&
+          (<Tooltip title={project && project.url}><a href={project ? project.url : "#"} target="_blank"><OpenInNewIcon /></a></Tooltip>)
+        }
+      </>
+    )
+
     return (
       <Container>
         <section className="section">
           <Typography variant="h2">
-            {project ? project.name : "Loading..."} {showRepoButton}
+            {project ? project.name : "Loading..."} {showUrlButton} {showRepoButton}
           </Typography>
         </section>
 

@@ -25,6 +25,8 @@ import { DirectUpload } from '@rails/activestorage'
 import SkillForm from './SkillForm'
 import ScreenshotItem from './ScreenshotItem'
 
+import settings from '../../settings/settings'
+
 import { CustomSnackbar, ConfirmationDialog, FormDialog } from '../Blocks'
 
 class ProjectForm extends React.Component {
@@ -35,6 +37,7 @@ class ProjectForm extends React.Component {
       name: "", // String - name of the project
       description: "", // Rich Text Description of the project
       repo_url: "", // Link to Github repo
+      url: "", // Link to hosted project
       status: "private", // Notes whether Github repo is private/public 
       blob_ids: [], // Array of screenshot blob_ids after uploading to ActiveStorage
       screenshotsToDisplay: [], // Array of screenshots already attached to the project to be displayed
@@ -64,6 +67,7 @@ class ProjectForm extends React.Component {
           name: currentValues.name,
           description: currentValues.description,
           repo_url: currentValues.repo_url,
+          url: currentValues.url,
           status: currentValues.status,
           screenshotsToDisplay: currentValues.screenshots,
           skills: currentValues.skills
@@ -73,6 +77,7 @@ class ProjectForm extends React.Component {
           name: "",
           description: "",
           repo_url: "",
+          url: "",
           status: 0,
           screenshotsToDisplay: [],
           skills: []
@@ -144,8 +149,7 @@ class ProjectForm extends React.Component {
   uploadFile = (file) => {
     this.setState({ uploading: true })
 
-    // * TODO: Add a settings file with baseURL
-    const url = "http://localhost:3000/rails/active_storage/direct_uploads"
+    const url = `${settings.baseURL}/rails/active_storage/direct_uploads`
 
     const upload = new DirectUpload(file, url)
 
@@ -257,6 +261,7 @@ class ProjectForm extends React.Component {
       name,
       description,
       repo_url,
+      url,
       status,
       screenshotsToDisplay,
       openSnackbar,
@@ -296,6 +301,20 @@ class ProjectForm extends React.Component {
                     name="name"
                     value={name}
                     id="projectName"
+                    required
+                    onChange={this.onChange}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    fullWidth
+                    style={{ margin: "10px", display: "block" }}
+                    label="Production URL"
+                    name="url"
+                    value={url}
+                    id="projectUrl"
                     required
                     onChange={this.onChange}
                   />
