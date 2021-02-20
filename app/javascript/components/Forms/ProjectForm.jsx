@@ -56,7 +56,6 @@ class ProjectForm extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-
     const { currentValues } = this.props
 
     if (prevProps.currentValues !== currentValues) {
@@ -347,6 +346,7 @@ class ProjectForm extends React.Component {
                     id="skills-select"
                     fullWidth
                     options={allSkills}
+                    getOptionSelected={(option, selectedValue) => option.name === selectedValue.name}
                     getOptionLabel={(option) => option.name}
                     multiple
                     value={skills}
@@ -435,7 +435,7 @@ class ProjectForm extends React.Component {
           title='Add a new skill'
           content="Fill out the details below to add a new skill"
         >
-          <SkillForm handleSubmit={this.handleSkillFormSubmit} />
+          <SkillForm handleSubmit={this.handleSkillFormSubmit} allSkills={allSkills} />
         </FormDialog>
       </Paper>
     )

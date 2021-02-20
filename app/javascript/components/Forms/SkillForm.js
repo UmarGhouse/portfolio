@@ -1,12 +1,12 @@
 import React from 'react'
 import { SketchPicker } from 'react-color'
 
-import { Button, Grid, TextField } from '@material-ui/core'
+import { Button, Grid, TextField, Chip } from '@material-ui/core'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
 
 import MomentUtils from '@date-io/moment'
 
-const SkillForm = ({ handleSubmit }) => {
+const SkillForm = ({ handleSubmit, allSkills }) => {
   const [state, setState] = React.useState({
     name: '',
     startDate: new Date(),
@@ -79,10 +79,24 @@ const SkillForm = ({ handleSubmit }) => {
         </Grid>
 
         <Grid item xs={12}>
-          <SketchPicker
-            color={state.colour}
-            onChangeComplete={colour => { setState({ ...state, colour: colour.hex}) }}
-          />
+          <Grid container spacing={3} justify="space-between">
+            <Grid item xs={12} md={6}>
+              <SketchPicker
+                color={state.colour}
+                onChangeComplete={colour => { setState({ ...state, colour: colour.hex}) }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              {allSkills.map(skill => (
+                <Chip
+                  label={skill.name}
+                  style={{ backgroundColor: skill.colour, margin: '2px' }}
+                />
+              ))}
+            </Grid>
+          </Grid>
+
         </Grid>
       </Grid>
 
