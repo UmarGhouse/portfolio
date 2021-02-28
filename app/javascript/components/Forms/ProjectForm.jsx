@@ -27,7 +27,7 @@ import ScreenshotItem from './ScreenshotItem'
 
 import settings from '../../settings/settings'
 
-import { CustomSnackbar, ConfirmationDialog, FormDialog } from '../Blocks'
+import { CustomSnackbar, ConfirmationDialog, FormDialog, SkillChip } from '../Blocks'
 
 class ProjectForm extends React.Component {
   constructor(props) {
@@ -374,11 +374,7 @@ class ProjectForm extends React.Component {
                     renderInput={(params) => <TextField {...params} label="Skills" variant="outlined" />}
                     renderTags={(tagValue, getTagProps) =>
                       tagValue.map((option, index) => (
-                        <Chip
-                          label={option.name}
-                          {...getTagProps({ index })}
-                          style={{ backgroundColor: option.colour }}
-                        />
+                        <SkillChip skill={option} {...getTagProps({ index })} key={index} />
                       ))
                     }
                   />

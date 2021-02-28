@@ -7,7 +7,7 @@ import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import GitHubIcon from '@material-ui/icons/GitHub'
 
-import { LinkButton, Footer } from '../Blocks'
+import { LinkButton, Footer, SkillChip } from '../Blocks'
 import { SanitizeHTML } from '../Utilities'
 import UserContext from '../Contexts/UserContext'
 
@@ -122,7 +122,7 @@ class Project extends React.Component {
         </section>
 
         {project && project.skills.map(skill => (
-          <Chip size="small" label={skill.name} key={skill.value /* skill.id */} className="skill-chip" style={{ backgroundColor: skill.colour }} />
+          <SkillChip skill={skill} key={skill.value /* skill.id */} />
         ))}
 
         <section className="section">

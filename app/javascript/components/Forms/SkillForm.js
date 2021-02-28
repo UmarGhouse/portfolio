@@ -6,6 +6,8 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 
 import MomentUtils from '@date-io/moment'
 
+import { SkillChip } from '../Blocks'
+
 const SkillForm = ({ handleSubmit, allSkills }) => {
   const [state, setState] = React.useState({
     name: '',
@@ -89,10 +91,7 @@ const SkillForm = ({ handleSubmit, allSkills }) => {
 
             <Grid item xs={12} md={6}>
               {allSkills.map(skill => (
-                <Chip
-                  label={skill.name}
-                  style={{ backgroundColor: skill.colour, margin: '2px' }}
-                />
+                <SkillChip skill={skill} key={skill.id} />
               ))}
             </Grid>
           </Grid>

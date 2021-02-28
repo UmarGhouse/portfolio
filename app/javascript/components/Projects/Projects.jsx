@@ -8,7 +8,7 @@ import Skeleton from '@material-ui/lab/Skeleton'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 
-import { LinkButton, Footer } from '../Blocks'
+import { LinkButton, Footer, SkillChip } from '../Blocks'
 import { SanitizeHTML } from '../Utilities'
 import UserContext from '../Contexts/UserContext'
 
@@ -69,7 +69,7 @@ class Projects extends Component {
 							</Typography>
 
 							{project.skills && project.skills.map(skill => (
-								<Chip size="small" label={skill.name} key={skill.id} className="skill-chip" style={{ backgroundColor: skill.colour }} />
+								<SkillChip skill={skill} key={skill.id} />
 							))}
 						</CardContent>
 					</Card>
