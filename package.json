@@ -32,5 +32,8 @@
   "devDependencies": {
     "eslint-config-wesbos": "^1.0.1",
     "webpack-dev-server": "^3.11.0"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }
