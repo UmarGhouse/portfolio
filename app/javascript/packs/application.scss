@@ -1,25 +1,31 @@
-@import '../stylesheets/home.scss';
-@import '../stylesheets/projects.scss';
-@import '../stylesheets/variables.scss';
+@import "../stylesheets/home.scss";
+@import "../stylesheets/projects.scss";
+@import "../stylesheets/variables.scss";
 @import "~react-image-gallery/styles/scss/image-gallery.scss";
-
 
 body {
   background-color: $baseColor;
   color: $accentBlack;
   min-width: 100%;
-  background-image: url('/assets/dot-grid.png');
+  background-image: url("/assets/dot-grid.png");
   background-repeat: repeat;
+  font-family: $bodyType;
 
   a {
     color: $accentRed !important;
   }
 
-  a, a:hover {
+  a,
+  a:hover {
     text-decoration: none !important;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: $headerType !important;
   }
 }
@@ -28,7 +34,8 @@ body {
   display: inline;
 }
 
-.btn-container .btn-primary, .btn-container .btn-secondary {
+.btn-container .btn-primary,
+.btn-container .btn-secondary {
   transition: 0.25s ease-out;
 }
 
