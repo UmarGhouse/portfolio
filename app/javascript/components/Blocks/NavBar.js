@@ -134,7 +134,7 @@ export default function NavBar(props) {
               </Link>
 
               <div className={classes.navLinksContainer}>
-                <Hidden implementation="js" mdUp>
+                <Hidden implementation="js" lgUp>
                   <IconButton className={classes.menuIcon} onClick={() => { setDrawerOpen(true) }}>
                     <MenuIcon />
                   </IconButton>

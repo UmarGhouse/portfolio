@@ -7,7 +7,7 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 import { LinkButton, Footer } from '../Blocks'
 import { SanitizeHTML } from '../Utilities'
 
-import heroImage from '../../../assets/images/hero-image.svg'
+import heroImage from '../../../assets/images/hero-image-ouch.svg'
 
 export default () => {
 
@@ -55,7 +55,7 @@ export default () => {
 						</p>
 
 						<p className='hero-body'>
-							I'm a (mostly) fullstack developer, with a focus on backend development. I work with Rails and React (among other technologies) 
+							I'm a fullstack developer, with a focus on backend development. I work with Node.js and React (among other technologies, like Rails) 
 							to help build valuable tech products for everyone.
 						</p>
 					</Grid>
