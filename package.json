@@ -11,7 +11,7 @@
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.1.1",
     "@rails/ujs": "^6.0.0",
-    "@rails/webpacker": "4.3.0",
+    "@rails/webpacker": "5.4.4",
     "@tinymce/tinymce-react": "^3.10.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "dotenv": "^8.2.0",
@@ -31,9 +31,9 @@
   "version": "0.1.0",
   "devDependencies": {
     "eslint-config-wesbos": "^1.0.1",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "~3"
   },
   "engines": {
-    "node": "14.x"
+    "node": "16.x"
   }
 }
