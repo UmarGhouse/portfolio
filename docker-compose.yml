@@ -16,10 +16,13 @@ services:
     env_file: .env
     environment:
       RAILS_ENV: development
+      DATABASE_URL: postgres://postgres:BatSQL12@database:5432/postgres
   database:
     image: postgres:12.15
     volumes:
       - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: "BatSQL12"
 
 volumes:
   gem_cache:
