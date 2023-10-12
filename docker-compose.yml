@@ -10,19 +10,19 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
+      - .:/usr/app/portfolio
       - gem_cache:/usr/local/bundle/gems
-      - node_modules:/app/node_modules
-    env_file: .env
+      - node_modules:/usr/app/portfolio/node_modules
     environment:
-      RAILS_ENV: development
-      DATABASE_URL: postgres://postgres:BatSQL12@database:5432/postgres
+      RAILS_ENV: ${RAILS_ENV}
+      DATABASE_URL: ${PG_DATABASE_URL}
   database:
     image: postgres:12.15
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: "BatSQL12"
+      POSTGRES_PASSWORD: ${PORTFOLIO_DATABASE_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
 
 volumes:
   gem_cache:
