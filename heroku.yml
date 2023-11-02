@@ -10,9 +10,9 @@ build:
   config:
     RAILS_ENV: production
     # FOO: bar
-# release:
-#   command:
-#     - ./deployment-tasks.sh
-#   image: worker
+release:
+  command:
+    - rails db:migrates
+  # image: worker
 run:
-  web: bundle exec puma -C config/puma.rb
+  web: bundle exec rails s -b 0.0.0.0
