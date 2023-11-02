@@ -21,7 +21,7 @@ default: &default
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   # On docker, host must match service name in docker-compose
-  host: database:5432
+  host: database
 
 development:
   <<: *default
