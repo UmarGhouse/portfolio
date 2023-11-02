@@ -12,7 +12,7 @@ build:
     # FOO: bar
 release:
   command:
-    - rails db:migrate
+    - ./deployment-tasks.sh
   image: web
 run:
   web: bundle exec rails s -b 0.0.0.0
