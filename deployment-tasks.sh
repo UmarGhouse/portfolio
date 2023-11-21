@@ -1,3 +1,3 @@
 #!/bin/sh
 
-rails db:migrate
+bin/rails db:migrate
