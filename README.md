@@ -1,24 +1,23 @@
-# README
+# Tech Stack
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This project runs on the following:
 
-Things you may want to cover:
+- Ruby 2.7.6
+- Rails 6.0.6.1
+- React v17
+- PostgreSQL 12.15
+- Docker
 
-* Ruby version
+# Getting started
 
-* System dependencies
+The app and associated services (Postgres) are dockerized and setup in `docker-compose.yml` for development and `heroku.yml` for production.
 
-* Configuration
+To get started in development, simply run:
 
-* Database creation
+```bash
+docker-compose up -d
+```
 
-* Database initialization
+# Deployment
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Deployment is handled by `heroku.yml` and set to deploy automatically from the `master` branch
